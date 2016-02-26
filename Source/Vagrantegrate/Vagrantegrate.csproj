@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{580B9F22-78DC-4B13-889D-EB04E9C8051B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Vagrantegrate</RootNamespace>
+    <AssemblyName>Vagrantegrate</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Factory\IVagrantFileFactory.cs" />
+    <Compile Include="IntegrationTestEnvironment.cs" />
+    <Compile Include="IVagrant.cs" />
+    <Compile Include="CommandLine\CmdExecutor.cs" />
+    <Compile Include="Factory\VagrantFile\ExposedPortDefinition.cs" />
+    <Compile Include="Factory\VagrantBuildingSteps\IVagrantFactoryStepBox.cs" />
+    <Compile Include="Factory\VagrantBuildingSteps\IVagrantFactoryStepFinalization.cs" />
+    <Compile Include="Factory\VagrantBuildingSteps\IVagrantFactoryStepNetworking.cs" />
+    <Compile Include="Factory\VagrantBuildingSteps\IVagrantFactoryStepProvisioning.cs" />
+    <Compile Include="Factory\VagrantFile\ShellExternalScriptDefinition.cs" />
+    <Compile Include="Factory\VagrantFile\ShellInlineScriptDefinition.cs" />
+    <Compile Include="Factory\VagrantFile\VagrantFileDefinition.cs" />
+    <Compile Include="Factory\VagrantBuildingSteps\VagrantStepFactory.cs" />
+    <Compile Include="INetworking.cs" />
+    <Compile Include="Factory\Networking\INetworkingFactory.cs" />
+    <Compile Include="IProvisioning.cs" />
+    <Compile Include="Factory\Provisioning\IProvisioningFactory.cs" />
+    <Compile Include="Factory\VagrantBuildingSteps\IVagrantFactoryStepFolder.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
