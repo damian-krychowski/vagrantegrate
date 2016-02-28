@@ -9,6 +9,26 @@ namespace Vagrantegrate.Factory.VagrantFile
         StringBuilder AppendToVagrantFile(StringBuilder vagrantFileBuilder);
     }
 
+    internal class DockerProvisionDefitions : IVagrantFileBuilder
+    {
+        private bool _shouldInstall = false;
+
+        public void Install()
+        {
+            _shouldInstall = true;
+        }
+
+        public StringBuilder AppendToVagrantFile(StringBuilder vagrantFileBuilder)
+        {
+            if (_shouldInstall)
+            {
+                vagrantFileBuilder.AppendLine("config.vm.provision :docker");
+            }
+
+            return vagrantFileBuilder;
+        }
+    }
+
 
     internal class VagrantFileDefinition
     {
@@ -20,7 +40,7 @@ namespace Vagrantegrate.Factory.VagrantFile
         private readonly ExposedPortDefinitions _exposedPorts = new ExposedPortDefinitions(); 
         private readonly ShellProvisionDefinitions _shellProvisionDefinitions = new ShellProvisionDefinitions();
         private readonly FileProvisionDefinitions _fileProvisionDefinitions = new FileProvisionDefinitions();
-        private readonly DockerComposeProvisionDefinitions _dockerComposeProvisionDefinitions = new DockerComposeProvisionDefinitions();
+        private readonly DockerProvisionDefitions _dockerProvisionDefitions = new DockerProvisionDefitions();
 
         public string EnvironmentPath => _fileLocation;
 
@@ -81,17 +101,24 @@ namespace Vagrantegrate.Factory.VagrantFile
             _fileProvisionDefinitions.AddFile(sourcePath, destinationPath);
         }
 
-        public void AddDockerComposeFile(string dockerComposeFilePath)
+        public void AddDockerComposeFile(string dockerComposeFilePath, LinuxUri destination)
         {
             if (String.IsNullOrEmpty(dockerComposeFilePath))
                 throw new ArgumentException("Argument is null or empty", nameof(dockerComposeFilePath));
 
-            _dockerComposeProvisionDefinitions.AddDockerComposeFile(dockerComposeFilePath);
+            InstallDocker();
+            AddFile(dockerComposeFilePath, destination.File);
+            AddShellInlineScript("sudo apt-get update");
+            AddShellInlineScript("sudo apt-get install docker-compose -y");
+
+            AddShellInlineScript(string.IsNullOrEmpty(destination.Path)
+                ? "sudo docker-compose up -d"
+                : $"cd /{destination.Path} && sudo docker-compose up -d");
         }
 
-        public void RebuildDockerComposeOnVagrantUp()
+        public void InstallDocker()
         {
-            _dockerComposeProvisionDefinitions.ShouldRebuildOnVagrantUp();
+            _dockerProvisionDefitions.Install();
         }
 
         public void Save()
@@ -111,7 +138,7 @@ namespace Vagrantegrate.Factory.VagrantFile
 
             builder = _exposedPorts.AppendToVagrantFile(builder);
             builder = _fileProvisionDefinitions.AppendToVagrantFile(builder);
-            builder = _dockerComposeProvisionDefinitions.AppendToVagrantFile(builder);
+            builder = _dockerProvisionDefitions.AppendToVagrantFile(builder);
             builder = _shellProvisionDefinitions.AppendToVagrantFile(builder);
 
             AppendFileEnd(builder);

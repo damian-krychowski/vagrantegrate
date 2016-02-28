@@ -14,7 +14,10 @@ namespace Vagrantegrate.Factory.VagrantFile
             if (String.IsNullOrEmpty(scriptBody))
                 throw new ArgumentException("Argument is null or empty", nameof(scriptBody));
 
-            _scripts.Add(scriptBody);
+            if (!Contains(scriptBody))
+            {
+                _scripts.Add(scriptBody);
+            }
         }
 
         public override string ToString()
@@ -27,6 +30,8 @@ namespace Vagrantegrate.Factory.VagrantFile
 
             return builder.ToString();
         }
+
+        public bool Contains(string scriptBody) => _scripts.Contains(scriptBody);
 
         public bool WasUsed => _scripts.Any();
 

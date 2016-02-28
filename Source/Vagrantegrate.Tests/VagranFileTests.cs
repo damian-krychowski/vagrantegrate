@@ -134,9 +134,8 @@ namespace Vagrantegrate.Tests
             Fixture.Sut.SetLocation(@"C:/IntegrationTest/Vagrant/");
             Fixture.Sut.StartFromBox("hashicorp/precise64");
 
-            Fixture.Sut.AddDockerComposeFile(@"C:\VagrantScripts\Test1\docker-compose.yml");
-            Fixture.Sut.AddDockerComposeFile(@"C:\VagrantScripts\Test2\docker-compose.yml");
-            Fixture.Sut.RebuildDockerComposeOnVagrantUp();
+            Fixture.Sut.AddDockerComposeFile(@"C:\VagrantScripts\Test1\docker-compose.yml", new LinuxUri("./First/docker-compose.yml"));
+            Fixture.Sut.AddDockerComposeFile(@"C:\VagrantScripts\Test2\docker-compose.yml", new LinuxUri("./Second/docker-compose.yml"));
 
             //Act
             Fixture.Sut.Save();
@@ -144,16 +143,17 @@ namespace Vagrantegrate.Tests
             //Assert
             Fixture.ReadVagrantFileContent(@"C:/IntegrationTest/Vagrant/VagrantFile")
                 .Should().BeEquivalentTo(
-                    "unless Vagrant.has_plugin ? (\"vagrant-docker-compose\")" + Environment.NewLine +
-                    "system(\"vagrant plugin install vagrant-docker-compose\")" + Environment.NewLine +
-                    "puts \"Dependencies installed, please try the command again.\"" + Environment.NewLine +
-                    "exit" + Environment.NewLine +
-                    "end" + Environment.NewLine +
                     "Vagrant.configure(2) do |config|" + Environment.NewLine +
                     "config.vm.box = \"hashicorp/precise64\"" + Environment.NewLine +
+                    "config.vm.provision :file, source: \"C:\\VagrantScripts\\Test1\\docker-compose.yml\", destination: \"./First/docker-compose.yml\"" + Environment.NewLine +
+                    "config.vm.provision :file, source: \"C:\\VagrantScripts\\Test2\\docker-compose.yml\", destination: \"./Second/docker-compose.yml\"" + Environment.NewLine +
                     "config.vm.provision :docker" + Environment.NewLine +
-                    "config.vm.provision :docker_compose, yml: [\"C:\\VagrantScripts\\Test1\\docker-compose.yml\",\"C:\\VagrantScripts\\Test2\\docker-compose.yml\"], rebuild: true, run: \"always\"" +
-                    Environment.NewLine +
+                    "config.vm.provision :shell, inline: <<-SHELL" + Environment.NewLine +
+                    "sudo apt-get update" + Environment.NewLine +
+                    "sudo apt-get install docker-compose" + Environment.NewLine +
+                    "cd /First && sudo docker-compose up -d" + Environment.NewLine +
+                    "cd /Second && sudo docker-compose up -d" + Environment.NewLine +
+                    "SHELL" + Environment.NewLine +
                     "end");
         }
 

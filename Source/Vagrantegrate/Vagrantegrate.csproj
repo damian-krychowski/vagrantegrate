@@ -41,7 +41,6 @@
     <Compile Include="Factory\Provisioning\DockerComposeProvisioning.cs" />
     <Compile Include="Factory\Provisioning\DockerProvisioning.cs" />
     <Compile Include="Factory\IVagrantFileFactory.cs" />
-    <Compile Include="Factory\VagrantFile\DockerComposeProvisionDefinitions.cs" />
     <Compile Include="Factory\VagrantFile\FileDefinition.cs" />
     <Compile Include="Factory\Provisioning\FileProvisioning.cs" />
     <Compile Include="Factory\Provisioning\IDockerComposeProvisioning.cs" />
@@ -66,6 +65,7 @@
     <Compile Include="Factory\Provisioning\IProvisioning.cs" />
     <Compile Include="Factory\Provisioning\IProvisioningFactory.cs" />
     <Compile Include="Factory\VagrantBuildingSteps\IVagrantFactoryStepFolder.cs" />
+    <Compile Include="LinuxUri.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Factory\Provisioning\Provisioning.cs" />
     <Compile Include="Factory\Provisioning\ShellProvisioning.cs" />

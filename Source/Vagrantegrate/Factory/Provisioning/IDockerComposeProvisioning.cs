@@ -2,7 +2,6 @@
 {
     public interface IDockerComposeProvisioning
     {
-        IDockerComposeProvisioning WithDockerComposeFile(string dockerComposePath);
-        void RebuildOnVagrantUp();
+        IDockerComposeProvisioning WithDockerComposeFile(string dockerComposePath, string destinationPath);
     }
 }
