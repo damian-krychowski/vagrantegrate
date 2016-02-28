@@ -9,42 +9,32 @@ namespace Vagrantegrate.CommandLine
 {
     internal interface ICmdExecutor
     {
-        ICmdExecutor WithCommand(string command);
-        void Execute();
+        ICmdExecutor WithWorkingDirectory(string path);
+        void Execute(string command);
     }
 
     internal class CmdExecutor : ICmdExecutor
     {
-        private readonly List<string> _commands = new List<string>();  
+        private string _workingDirectory;
 
-        public ICmdExecutor WithCommand(string command)
+        public ICmdExecutor WithWorkingDirectory(string path)
         {
-            _commands.Add(command);
+            _workingDirectory = path;
             return this;
         }
 
-        public void Execute()
+        public void Execute(string command)
         {
             var processStartInfo = new ProcessStartInfo("cmd.exe")
             {
-                RedirectStandardInput = true,
-                RedirectStandardOutput = true,
-                UseShellExecute = false
+                WorkingDirectory = _workingDirectory,
+                Arguments = "/c " + command,
+                RedirectStandardOutput = false,
+                UseShellExecute = true,
+                CreateNoWindow = false
             };
-
-            var process = Process.Start(processStartInfo);
-
-         
-            if (process != null)
-            {
-                foreach (var command in _commands)
-                {
-                    process.StandardInput.WriteLine(command);
-                }
-
-                process.StandardInput.Close();
-                process.WaitForExit();
-            }
+            var cmd = Process.Start(processStartInfo);
+            cmd.WaitForExit();
         }
     }
 }

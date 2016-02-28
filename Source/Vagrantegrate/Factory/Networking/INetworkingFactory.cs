@@ -11,7 +11,7 @@ namespace Vagrantegrate.Factory.Networking
     {
         public INetworking Create(VagrantFileDefinition vagrantFile)
         {
-            return new Vagrantegrate.Networking(vagrantFile);
+            return new Networking(vagrantFile);
         }
     }
 }   

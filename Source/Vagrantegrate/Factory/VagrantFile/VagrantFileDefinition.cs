@@ -4,6 +4,11 @@ using System.Text;
 
 namespace Vagrantegrate.Factory.VagrantFile
 {
+    internal interface IVagrantFileBuilder
+    {
+        StringBuilder AppendToVagrantFile(StringBuilder vagrantFileBuilder);
+    }
+
 
     internal class VagrantFileDefinition
     {
@@ -11,9 +16,13 @@ namespace Vagrantegrate.Factory.VagrantFile
         private string _fileLocation;
         private string _boxName;
         private string _systemName;
-        private readonly List<ExposedPortDefinition> _exposedPorts = new List<ExposedPortDefinition>(); 
-        private readonly List<ShellExternalScriptDefinition> _externalShellScriptDefinitions = new List<ShellExternalScriptDefinition>(); 
-        private readonly ShellInlineScriptDefinition _shellInlineScriptDefinition = new ShellInlineScriptDefinition();
+
+        private readonly ExposedPortDefinitions _exposedPorts = new ExposedPortDefinitions(); 
+        private readonly ShellProvisionDefinitions _shellProvisionDefinitions = new ShellProvisionDefinitions();
+        private readonly FileProvisionDefinitions _fileProvisionDefinitions = new FileProvisionDefinitions();
+        private readonly DockerComposeProvisionDefinitions _dockerComposeProvisionDefinitions = new DockerComposeProvisionDefinitions();
+
+        public string EnvironmentPath => _fileLocation;
 
         public VagrantFileDefinition(IVagrantFileFactory vagrantFileFactory)
         {
@@ -45,7 +54,7 @@ namespace Vagrantegrate.Factory.VagrantFile
 
         public void AddExposedPort(int guestPort, int hostPort)
         {
-            _exposedPorts.Add(new ExposedPortDefinition(guestPort, hostPort));
+            _exposedPorts.Add(guestPort, hostPort);
         }
 
         public void AddShellExternalScript(string scriptFilePath)
@@ -53,12 +62,36 @@ namespace Vagrantegrate.Factory.VagrantFile
             if (String.IsNullOrEmpty(scriptFilePath))
                 throw new ArgumentException("Argument is null or empty", nameof(scriptFilePath));
 
-            _externalShellScriptDefinitions.Add(new ShellExternalScriptDefinition(scriptFilePath));
+          _shellProvisionDefinitions.AddExternalScript(scriptFilePath);
         }
 
         public void AddShellInlineScript(string inlineScriptBody)
         {
-            _shellInlineScriptDefinition.AddScript(inlineScriptBody);
+           _shellProvisionDefinitions.AddInlineScript(inlineScriptBody);
+        }
+
+        public void AddFile(string sourcePath, string destinationPath)
+        {
+            if (String.IsNullOrEmpty(sourcePath))
+                throw new ArgumentException("Argument is null or empty", nameof(sourcePath));
+
+            if (String.IsNullOrEmpty(destinationPath))
+                throw new ArgumentException("Argument is null or empty", nameof(destinationPath));
+
+            _fileProvisionDefinitions.AddFile(sourcePath, destinationPath);
+        }
+
+        public void AddDockerComposeFile(string dockerComposeFilePath)
+        {
+            if (String.IsNullOrEmpty(dockerComposeFilePath))
+                throw new ArgumentException("Argument is null or empty", nameof(dockerComposeFilePath));
+
+            _dockerComposeProvisionDefinitions.AddDockerComposeFile(dockerComposeFilePath);
+        }
+
+        public void RebuildDockerComposeOnVagrantUp()
+        {
+            _dockerComposeProvisionDefinitions.ShouldRebuildOnVagrantUp();
         }
 
         public void Save()
@@ -75,14 +108,20 @@ namespace Vagrantegrate.Factory.VagrantFile
 
             AppendFileStart(builder);
             AppendBoxLineIfUsed(builder);
-            AppendExposedPorts(builder);
-            AppendInlineShellScripts(builder);
+
+            builder = _exposedPorts.AppendToVagrantFile(builder);
+            builder = _fileProvisionDefinitions.AppendToVagrantFile(builder);
+            builder = _dockerComposeProvisionDefinitions.AppendToVagrantFile(builder);
+            builder = _shellProvisionDefinitions.AppendToVagrantFile(builder);
+
             AppendFileEnd(builder);
 
             return builder.ToString();
         }
 
-        
+
+
+
         private static void AppendFileEnd(StringBuilder builder)
         {
             builder.Append("end");
@@ -93,18 +132,6 @@ namespace Vagrantegrate.Factory.VagrantFile
             builder.AppendLine("Vagrant.configure(2) do |config|");
         }
 
-        private void AppendInlineShellScripts(StringBuilder builder)
-        {
-            builder.Append(_shellInlineScriptDefinition.ToString());
-        }
-
-        private void AppendExposedPorts(StringBuilder builder)
-        {
-            foreach (var exposedPortDefinition in _exposedPorts)
-            {
-                builder.AppendLine(exposedPortDefinition.ToString());
-            }
-        }
 
         private void AppendBoxLineIfUsed(StringBuilder builder)
         {

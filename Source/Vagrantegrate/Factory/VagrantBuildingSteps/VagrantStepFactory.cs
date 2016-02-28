@@ -42,6 +42,11 @@ namespace Vagrantegrate.Factory.VagrantBuildingSteps
             return this;
         }
 
+        public IVagrantFactoryStepFinalization WithVagrantfile(string vagrantfilePath)
+        {
+            throw new NotImplementedException();
+        }
+
         public IVagrantFactoryStepProvisioning WithBox(string boxName)
         {
             _vagrantFile.StartFromBox(boxName);
@@ -52,6 +57,36 @@ namespace Vagrantegrate.Factory.VagrantBuildingSteps
         {
             _vagrantFile.InitWith(systemName);
             return this;
+        }
+
+        public IVagrantFactoryStepProvisioning WithTrusty32()
+        {
+            return WithBox("ubuntu/trusty32");
+        }
+
+        public IVagrantFactoryStepProvisioning WithTrusty64()
+        {
+            return WithBox("ubuntu/trusty62");
+        }
+
+        public IVagrantFactoryStepProvisioning WithWily32()
+        {
+            return WithBox("ubuntu/wily32");
+        }
+
+        public IVagrantFactoryStepProvisioning WithWily64()
+        {
+            return WithBox("ubuntu/wily64");
+        }
+
+        public IVagrantFactoryStepProvisioning WithPrecise32()
+        {
+            return WithBox("ubuntu/precise32");
+        }
+
+        public IVagrantFactoryStepProvisioning WithPrecise64()
+        {
+            return WithBox("ubuntu/precise64");
         }
 
         public IVagrantFactoryStepNetworking WithProvision(Action<IProvisioning> provisioning)
@@ -82,7 +117,9 @@ namespace Vagrantegrate.Factory.VagrantBuildingSteps
 
         public IVagrant Prepare()
         {
-            throw new NotImplementedException();
+            _vagrantFile.Save();
+          
+            return new Vagrant(_cmdExecutor, _vagrantFile.EnvironmentPath);
         }
     }
 }

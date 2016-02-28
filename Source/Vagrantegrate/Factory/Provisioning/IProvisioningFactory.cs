@@ -11,7 +11,7 @@ namespace Vagrantegrate.Factory.Provisioning
     {
         public IProvisioning Create(VagrantFileDefinition vagrantFile)
         {
-            return new Vagrantegrate.Provisioning(vagrantFile);
+            return new Provisioning(vagrantFile);
         }
     }
 }

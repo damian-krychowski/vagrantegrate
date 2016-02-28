@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Vagrantegrate.Factory.VagrantFile
@@ -27,6 +28,8 @@ namespace Vagrantegrate.Factory.VagrantFile
             return builder.ToString();
         }
 
+        public bool WasUsed => _scripts.Any();
+
         private static void AppendCommandsEnd(StringBuilder builder)
         {
             builder.AppendLine("SHELL");
@@ -42,7 +45,7 @@ namespace Vagrantegrate.Factory.VagrantFile
 
         private static void AppendCommandsStart(StringBuilder builder)
         {
-            builder.AppendLine("config.vm.provision \"shell\", inline: <<-SHELL");
+            builder.AppendLine("config.vm.provision :shell, inline: <<-SHELL");
         }
     }
 }

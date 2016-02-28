@@ -1,4 +1,5 @@
 using System;
+using Vagrantegrate.Factory.Networking;
 
 namespace Vagrantegrate.Factory.VagrantBuildingSteps
 {
