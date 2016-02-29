@@ -41,6 +41,7 @@
     <Compile Include="Factory\Provisioning\DockerComposeProvisioning.cs" />
     <Compile Include="Factory\Provisioning\DockerProvisioning.cs" />
     <Compile Include="Factory\IVagrantFileFactory.cs" />
+    <Compile Include="Factory\VagrantFile\DockerProvisionDefitions.cs" />
     <Compile Include="Factory\VagrantFile\FileDefinition.cs" />
     <Compile Include="Factory\Provisioning\FileProvisioning.cs" />
     <Compile Include="Factory\Provisioning\IDockerComposeProvisioning.cs" />

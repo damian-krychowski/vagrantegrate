@@ -9,26 +9,6 @@ namespace Vagrantegrate.Factory.VagrantFile
         StringBuilder AppendToVagrantFile(StringBuilder vagrantFileBuilder);
     }
 
-    internal class DockerProvisionDefitions : IVagrantFileBuilder
-    {
-        private bool _shouldInstall = false;
-
-        public void Install()
-        {
-            _shouldInstall = true;
-        }
-
-        public StringBuilder AppendToVagrantFile(StringBuilder vagrantFileBuilder)
-        {
-            if (_shouldInstall)
-            {
-                vagrantFileBuilder.AppendLine("config.vm.provision :docker");
-            }
-
-            return vagrantFileBuilder;
-        }
-    }
-
 
     internal class VagrantFileDefinition
     {
@@ -51,24 +31,20 @@ namespace Vagrantegrate.Factory.VagrantFile
 
         public void SetLocation(string path)
         {
-            if (String.IsNullOrEmpty(path)) throw new ArgumentException("Argument is null or empty", nameof(path));
+            CheckInput(path, nameof(path));
 
             _fileLocation = path;
         }
 
         public void StartFromBox(string boxName)
         {
-            if (String.IsNullOrEmpty(boxName))
-                throw new ArgumentException("Argument is null or empty", nameof(boxName));
-
+            CheckInput(boxName, nameof(boxName));
             _boxName = boxName;
         }
 
         public void InitWith(string systemName)
         {
-            if (String.IsNullOrEmpty(systemName))
-                throw new ArgumentException("Argument is null or empty", nameof(systemName));
-
+            CheckInput(systemName, nameof(systemName));
             _systemName = systemName;
         }
 
@@ -79,8 +55,7 @@ namespace Vagrantegrate.Factory.VagrantFile
 
         public void AddShellExternalScript(string scriptFilePath)
         {
-            if (String.IsNullOrEmpty(scriptFilePath))
-                throw new ArgumentException("Argument is null or empty", nameof(scriptFilePath));
+           CheckInput(scriptFilePath, nameof(scriptFilePath));
 
           _shellProvisionDefinitions.AddExternalScript(scriptFilePath);
         }
@@ -92,19 +67,15 @@ namespace Vagrantegrate.Factory.VagrantFile
 
         public void AddFile(string sourcePath, string destinationPath)
         {
-            if (String.IsNullOrEmpty(sourcePath))
-                throw new ArgumentException("Argument is null or empty", nameof(sourcePath));
-
-            if (String.IsNullOrEmpty(destinationPath))
-                throw new ArgumentException("Argument is null or empty", nameof(destinationPath));
+            CheckInput(sourcePath, nameof(sourcePath));
+            CheckInput(destinationPath, nameof(destinationPath));
 
             _fileProvisionDefinitions.AddFile(sourcePath, destinationPath);
         }
 
         public void AddDockerComposeFile(string dockerComposeFilePath, LinuxUri destination)
         {
-            if (String.IsNullOrEmpty(dockerComposeFilePath))
-                throw new ArgumentException("Argument is null or empty", nameof(dockerComposeFilePath));
+            CheckInput(dockerComposeFilePath, nameof(dockerComposeFilePath));
 
             InstallDocker();
             AddFile(dockerComposeFilePath, destination.File);
@@ -114,6 +85,11 @@ namespace Vagrantegrate.Factory.VagrantFile
             AddShellInlineScript(string.IsNullOrEmpty(destination.Path)
                 ? "sudo docker-compose up -d"
                 : $"cd /{destination.Path} && sudo docker-compose up -d");
+        }
+
+        private static void CheckInput(string inputValue, string inputName)
+        {
+            if (String.IsNullOrEmpty(inputValue)) throw new ArgumentException("Argument is null or empty", inputName);
         }
 
         public void InstallDocker()
