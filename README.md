@@ -1,2 +1,2 @@
 # vagrantegrate
-Prepare environment for your integration tests external components easily
+Prepare environment for your integration tests with external components easily
