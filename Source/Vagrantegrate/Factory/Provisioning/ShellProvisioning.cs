@@ -25,12 +25,5 @@ namespace Vagrantegrate.Factory.Provisioning
             _vagrantFile.Provision.Shell.AddInlineScript(scriptBody);
             return this;
         }
-
-        public IShellProvisioning WithNodeJs()
-        {
-            _vagrantFile.Provision.Shell.WithNodeJs();
-
-            return this;
-        }
     }
 }

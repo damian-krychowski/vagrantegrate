@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Xml.XPath;
 using FluentAssertions;
 using NUnit.Framework;
+using Vagrantegrate.Factory.Provisioning;
 using Vagrantegrate.Tests.Infrastructure;
 
 namespace Vagrantegrate.Tests

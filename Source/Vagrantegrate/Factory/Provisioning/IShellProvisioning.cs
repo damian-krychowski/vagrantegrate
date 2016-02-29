@@ -1,4 +1,5 @@
 ﻿using System;
+using Vagrantegrate.Factory.VagrantFile;
 
 namespace Vagrantegrate.Factory.Provisioning
 {
@@ -6,6 +7,24 @@ namespace Vagrantegrate.Factory.Provisioning
     {
         IShellProvisioning WithShellExternalScript(string scriptFilePath);
         IShellProvisioning WithShellInlineScript(string scriptBody);
-        IShellProvisioning WithNodeJs();
+    }
+
+    public static class ShellProvisioningDefinitionsExtensions
+    {
+        public static IShellProvisioning WithNodeJs(this IShellProvisioning provisioning)
+        {
+            return provisioning
+                .WithShellInlineScript(Linux.AptGet.AddRepository("ppa:chris-lea/node.js").ToString())
+                .WithShellInlineScript(Linux.AptGet.Update.ToString())
+                .WithShellInlineScript(Linux.AptGet.Install.NodeJs.ToString())
+                .WithShellInlineScript(Linux.Npm.Install.Npm.ToString());
+        }
+
+        public static IShellProvisioning WithMongoDb(this IShellProvisioning provisioning)
+        {
+            return provisioning
+                .WithShellInlineScript(Linux.AptGet.Update.ToString())
+                .WithShellInlineScript(Linux.AptGet.Install.MongoDb.ToString());
+        }
     }
 }

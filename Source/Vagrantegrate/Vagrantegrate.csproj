@@ -48,6 +48,8 @@
     <Compile Include="Factory\Provisioning\IDockerProvisioning.cs" />
     <Compile Include="Factory\Provisioning\IFileProvisioning.cs" />
     <Compile Include="Factory\VagrantFile\IVagrantFileBuilder.cs" />
+    <Compile Include="Linux\Linux.cs" />
+    <Compile Include="Linux\LinuxScript.cs" />
     <Compile Include="Factory\VagrantFile\NetworkingDefinition.cs" />
     <Compile Include="Factory\VagrantFile\ProvisionDefinition.cs" />
     <Compile Include="Factory\VagrantFile\ShellProvisionDefinitions.cs" />
@@ -69,7 +71,6 @@
     <Compile Include="Factory\Provisioning\IProvisioning.cs" />
     <Compile Include="Factory\Provisioning\IProvisioningFactory.cs" />
     <Compile Include="Factory\VagrantBuildingSteps\IVagrantFactoryStepFolder.cs" />
-    <Compile Include="LinuxUri.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Factory\Provisioning\Provisioning.cs" />
     <Compile Include="Factory\Provisioning\ShellProvisioning.cs" />

@@ -13,12 +13,12 @@ namespace Vagrantegrate.Factory.VagrantFile
             Docker.Install();
 
             Files.Add(dockerComposeFile, destination);
-            Shell.AddInlineScript("sudo apt-get update");
-            Shell.AddInlineScript("sudo apt-get install docker-compose -y");
+            Shell.AddInlineScript(Linux.AptGet.Update);
+            Shell.AddInlineScript(Linux.AptGet.Install.DockerCompose);
 
             Shell.AddInlineScript(destination.IsFileLocatedInRoot()
-                ? "sudo docker-compose up -d"
-                : $"cd {destination.LocationPathRelativeToRoot()} && sudo docker-compose up -d");
+                ? Linux.Docker.Compose.Up
+                : Linux.Cd(destination.LocationPathRelativeToRoot()).And(Linux.Docker.Compose.Up));
         }
 
         private static void CheckInput(string inputValue, string inputName)

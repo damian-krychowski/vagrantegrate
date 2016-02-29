@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Vagrantegrate.Factory.Provisioning;
 
 namespace Vagrantegrate.Factory.VagrantFile
 {
@@ -12,6 +13,12 @@ namespace Vagrantegrate.Factory.VagrantFile
         public ShellProvisionDefinitions AddInlineScript(string scriptBody)
         {
             _shellInlineScriptDefinition.AddScript(scriptBody);
+            return this;
+        }
+
+        public ShellProvisionDefinitions AddInlineScript(LinuxScript script)
+        {
+            _shellInlineScriptDefinition.AddScript(script.ToString());
             return this;
         }
 
@@ -33,18 +40,6 @@ namespace Vagrantegrate.Factory.VagrantFile
             }
           
             return vagrantFileBuilder;
-        }
-    }
-
-    internal static class ShellProvisionDefinitionsExtensions
-    {
-        public static void WithNodeJs(this ShellProvisionDefinitions definitions)
-        {
-            definitions
-                .AddInlineScript("sudo add-apt-repository ppa:chris-lea/node.js")
-                .AddInlineScript("sudo apt-get update")
-                .AddInlineScript("sudo apt-get install nodejs -y")
-                .AddInlineScript("sudo npm install npm -g");
         }
     }
 }
