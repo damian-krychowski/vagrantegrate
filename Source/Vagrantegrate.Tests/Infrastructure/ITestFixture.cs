@@ -1,6 +1,6 @@
 ﻿namespace Vagrantegrate.Tests.Infrastructure
 {
-    internal interface IUnitTestFixture
+    internal interface ITestFixture
     {
         void SetUp();
         void TearDown();

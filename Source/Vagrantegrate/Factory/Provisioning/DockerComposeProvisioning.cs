@@ -12,9 +12,9 @@ namespace Vagrantegrate.Factory.Provisioning
             _vagrantFile = vagrantFile;
         }
 
-        public IDockerComposeProvisioning WithDockerComposeFile(string dockerComposePath, string destinationPath)
+        public IDockerComposeProvisioning WithDockerComposeFile(string dockerComposeFilePath, string destinationPath)
         {
-            _vagrantFile.Provision.AddDockerComposeFile(dockerComposePath, new LinuxUri(destinationPath));
+            _vagrantFile.Provision.AddDockerComposeFile(new Uri(dockerComposeFilePath), new VagrantUri(destinationPath)); 
             return this;
         }
     }

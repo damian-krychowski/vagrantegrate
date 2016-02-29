@@ -2,12 +2,12 @@
 
 namespace Vagrantegrate.Tests.Infrastructure
 {
-    internal class UnitTest<TFixture>
-        where TFixture : IUnitTestFixture, new()
+    internal class Test<TFixture>
+        where TFixture : ITestFixture, new()
     {
         public TFixture Fixture { get; }
 
-        public UnitTest()
+        public Test()
         {
             Fixture = new TFixture();
         }

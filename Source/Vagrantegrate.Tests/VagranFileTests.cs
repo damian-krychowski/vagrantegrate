@@ -13,13 +13,19 @@ using Vagrantegrate.Tests.Infrastructure;
 
 namespace Vagrantegrate.Tests
 {
-    internal class VagrantFileTestsFixture : IUnitTestFixture
+    internal class VagrantFileTestsFixture : ITestFixture
     {
         public VagrantFileDefinition Sut { get; private set; }
 
         public void SetUp()
         {
-            Sut = new VagrantFileDefinition(new VagrantFileFactory());
+            Sut = new VagrantFileDefinition();
+        }
+
+        public void SaveVagrantFile()
+        {
+            var saver = new VagrantFileFactory();
+            saver.Create(Sut.ToString(), Sut.EnvironmentFolder.AbsolutePath, "VagrantFile");
         }
 
         public void TearDown()
@@ -36,17 +42,17 @@ namespace Vagrantegrate.Tests
     }
 
     [TestFixture]
-    internal class VagranFileTests : UnitTest<VagrantFileTestsFixture>
+    internal class VagranFileTests : Test<VagrantFileTestsFixture>
     {
         [Test]
         public void Can_create_basic_vagrant_file()
         {
             //Arrange
-            Fixture.Sut.SetLocation(@"C:/IntegrationTest/Vagrant/");
+            Fixture.Sut.SetLocation(new Uri(@"C:/IntegrationTest/Vagrant/"));
             Fixture.Sut.StartFromBox("hashicorp/precise64");
 
             //Act
-            Fixture.Sut.Save();
+            Fixture.SaveVagrantFile();
 
             //Assert
             Fixture.ReadVagrantFileContent(@"C:/IntegrationTest/Vagrant/VagrantFile")
@@ -60,14 +66,14 @@ namespace Vagrantegrate.Tests
         public void Can_expose_ports()
         {
             //Arrange
-            Fixture.Sut.SetLocation(@"C:/IntegrationTest/Vagrant/");
+            Fixture.Sut.SetLocation(new Uri(@"C:/IntegrationTest/Vagrant/"));
             Fixture.Sut.StartFromBox("hashicorp/precise64");
 
             Fixture.Sut.Network.ExposedPorts.Add(10, 8010);
             Fixture.Sut.Network.ExposedPorts.Add(32, 8032);
 
             //Act
-            Fixture.Sut.Save();
+            Fixture.SaveVagrantFile();
 
             //Assert
             Fixture.ReadVagrantFileContent(@"C:/IntegrationTest/Vagrant/VagrantFile")
@@ -83,14 +89,14 @@ namespace Vagrantegrate.Tests
         public void Can_use_inline_shell_scripts()
         {
             //Arrange
-            Fixture.Sut.SetLocation(@"C:/IntegrationTest/Vagrant/");
+            Fixture.Sut.SetLocation(new Uri(@"C:/IntegrationTest/Vagrant/"));
             Fixture.Sut.StartFromBox("hashicorp/precise64");
 
             Fixture.Sut.Provision.Shell.AddInlineScript("sudo apt-get update");
             Fixture.Sut.Provision.Shell.AddInlineScript("sudo apt-get install nano");
 
             //Act
-            Fixture.Sut.Save();
+            Fixture.SaveVagrantFile();
 
             //Assert
             Fixture.ReadVagrantFileContent(@"C:/IntegrationTest/Vagrant/VagrantFile")
@@ -108,14 +114,14 @@ namespace Vagrantegrate.Tests
         public void Can_use_external_shell_scripts()
         {
             //Arrange
-            Fixture.Sut.SetLocation(@"C:/IntegrationTest/Vagrant/");
+            Fixture.Sut.SetLocation(new Uri(@"C:/IntegrationTest/Vagrant/"));
             Fixture.Sut.StartFromBox("hashicorp/precise64");
 
-            Fixture.Sut.Provision.Shell.AddExternalScript("https://example.com/provisioner.sh");
-            Fixture.Sut.Provision.Shell.AddExternalScript(@"C:\VagrantScripts\Test.sh");
+            Fixture.Sut.Provision.Shell.AddExternalScript(new Uri("https://example.com/provisioner.sh"));
+            Fixture.Sut.Provision.Shell.AddExternalScript(new Uri(@"C:\VagrantScripts\Test.sh"));
 
             //Act
-            Fixture.Sut.Save();
+            Fixture.SaveVagrantFile();
 
             //Assert
             Fixture.ReadVagrantFileContent(@"C:/IntegrationTest/Vagrant/VagrantFile")
@@ -131,28 +137,33 @@ namespace Vagrantegrate.Tests
         public void Can_use_docker_compose_files()
         {
             //Arrange
-            Fixture.Sut.SetLocation(@"C:/IntegrationTest/Vagrant/");
+            Fixture.Sut.SetLocation(new Uri(@"C:/IntegrationTest/Vagrant/"));
             Fixture.Sut.StartFromBox("hashicorp/precise64");
 
-            Fixture.Sut.Provision.AddDockerComposeFile(@"C:\VagrantScripts\Test1\docker-compose.yml", new LinuxUri("./First/docker-compose.yml"));
-            Fixture.Sut.Provision.AddDockerComposeFile(@"C:\VagrantScripts\Test2\docker-compose.yml", new LinuxUri("./Second/docker-compose.yml"));
+            Fixture.Sut.Provision.AddDockerComposeFile(
+                new Uri(@"C:\VagrantScripts\Test1\docker-compose.yml"),
+                new VagrantUri("./First/docker-compose.yml"));
+
+            Fixture.Sut.Provision.AddDockerComposeFile(
+                new Uri(@"C:\VagrantScripts\Test2\docker-compose.yml"),
+                new VagrantUri("./Second/docker-compose.yml"));
 
             //Act
-            Fixture.Sut.Save();
+            Fixture.SaveVagrantFile();
 
             //Assert
             Fixture.ReadVagrantFileContent(@"C:/IntegrationTest/Vagrant/VagrantFile")
                 .Should().BeEquivalentTo(
                     "Vagrant.configure(2) do |config|" + Environment.NewLine +
                     "config.vm.box = \"hashicorp/precise64\"" + Environment.NewLine +
-                    "config.vm.provision :file, source: \"C:\\VagrantScripts\\Test1\\docker-compose.yml\", destination: \"./First/docker-compose.yml\"" + Environment.NewLine +
-                    "config.vm.provision :file, source: \"C:\\VagrantScripts\\Test2\\docker-compose.yml\", destination: \"./Second/docker-compose.yml\"" + Environment.NewLine +
+                    "config.vm.provision :file, source: \"C:/VagrantScripts/Test1/docker-compose.yml\", destination: \"./First/docker-compose.yml\"" + Environment.NewLine +
+                    "config.vm.provision :file, source: \"C:/VagrantScripts/Test2/docker-compose.yml\", destination: \"./Second/docker-compose.yml\"" + Environment.NewLine +
                     "config.vm.provision :docker" + Environment.NewLine +
                     "config.vm.provision :shell, inline: <<-SHELL" + Environment.NewLine +
                     "sudo apt-get update" + Environment.NewLine +
                     "sudo apt-get install docker-compose -y" + Environment.NewLine +
-                    "cd /First && sudo docker-compose up -d" + Environment.NewLine +
-                    "cd /Second && sudo docker-compose up -d" + Environment.NewLine +
+                    "cd First/ && sudo docker-compose up -d" + Environment.NewLine +
+                    "cd Second/ && sudo docker-compose up -d" + Environment.NewLine +
                     "SHELL" + Environment.NewLine +
                     "end");
         }
@@ -161,22 +172,22 @@ namespace Vagrantegrate.Tests
         public void Can_use_files()
         {
             //Arrange
-            Fixture.Sut.SetLocation(@"C:/IntegrationTest/Vagrant/");
+            Fixture.Sut.SetLocation(new Uri(@"C:/IntegrationTest/Vagrant/"));
             Fixture.Sut.StartFromBox("hashicorp/precise64");
 
-            Fixture.Sut.Provision.Files.Add(@"C:\Vagrant\File1", "~\\Copied\\File1");
-            Fixture.Sut.Provision.Files.Add(@"C:\Vagrant\File2", "~\\Copied\\File2");
+            Fixture.Sut.Provision.Files.Add(new Uri(@"C:\Vagrant\File1"), new VagrantUri("./Copied/File1"));
+            Fixture.Sut.Provision.Files.Add(new Uri(@"C:\Vagrant\File2"), new VagrantUri("./Copied/File2"));
 
             //Act
-            Fixture.Sut.Save();
+            Fixture.SaveVagrantFile();
 
             //Assert
             Fixture.ReadVagrantFileContent(@"C:/IntegrationTest/Vagrant/VagrantFile")
                 .Should().BeEquivalentTo(
                     "Vagrant.configure(2) do |config|" + Environment.NewLine +
                     "config.vm.box = \"hashicorp/precise64\"" + Environment.NewLine +
-                    "config.vm.provision :file, source: \"C:\\Vagrant\\File1\", destination: \"~\\Copied\\File1\"" + Environment.NewLine +
-                    "config.vm.provision :file, source: \"C:\\Vagrant\\File2\", destination: \"~\\Copied\\File2\"" + Environment.NewLine +
+                    "config.vm.provision :file, source: \"C:/Vagrant/File1\", destination: \"./Copied/File1\"" + Environment.NewLine +
+                    "config.vm.provision :file, source: \"C:/Vagrant/File2\", destination: \"./Copied/File2\"" + Environment.NewLine +
                     "end");
         }
     }

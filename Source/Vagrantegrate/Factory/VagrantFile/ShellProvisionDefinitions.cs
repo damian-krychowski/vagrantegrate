@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -14,9 +15,13 @@ namespace Vagrantegrate.Factory.VagrantFile
             return this;
         }
 
-        public ShellProvisionDefinitions AddExternalScript(string scriptFilePath)
+        public ShellProvisionDefinitions AddExternalScript(Uri scriptFile)
         {
-            _shellExternalScriptDefinitions.Add(new ShellExternalScriptDefinition(scriptFilePath));
+            _shellExternalScriptDefinitions.Add(
+                scriptFile.IsFile
+                    ? new ShellExternalScriptDefinition(scriptFile.AbsolutePath)
+                    : new ShellExternalScriptDefinition(scriptFile.AbsoluteUri));
+
             return this;
         }
 

@@ -18,33 +18,45 @@ namespace Vagrantegrate
     internal class Vagrant : IVagrant
     {
         private readonly ICmdExecutor _cmdExecutor;
-        private readonly string _environmentPath;
+        private readonly Uri _environmentFolder;
 
         public Vagrant(
             ICmdExecutor cmdExecutor,
-            string environmentPath)
+            Uri environmentFolder)
         {
             _cmdExecutor = cmdExecutor;
-            _environmentPath = environmentPath;
+            _environmentFolder = environmentFolder;
         }
 
         public void Up()
         {
             _cmdExecutor
-                .WithWorkingDirectory(_environmentPath)
+                .WithWorkingDirectory(_environmentFolder)
                 .Execute(VagrantUpCmd);
         }
 
         public void Destroy()
         {
-            throw new NotImplementedException();
+            _cmdExecutor
+                .WithWorkingDirectory(_environmentFolder)
+                .Execute(VagrantDestroyCmd);
         }
 
         public void Reload(bool runProvisioners)
         {
-            throw new NotImplementedException();
+            _cmdExecutor
+                .WithWorkingDirectory(_environmentFolder)
+                .Execute(VagrantReloadCmd(runProvisioners));
         }
 
         private string VagrantUpCmd => "vagrant up";
+        private string VagrantDestroyCmd => "vagrant destroy -f";
+
+        private string VagrantReloadCmd(bool runProvisioners)
+        {
+            return runProvisioners
+                ? "vagrant reload --provision"
+                : "vagrant reload";
+        }
     }
 }

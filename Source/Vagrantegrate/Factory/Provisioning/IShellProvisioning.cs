@@ -1,4 +1,6 @@
-﻿namespace Vagrantegrate.Factory.Provisioning
+﻿using System;
+
+namespace Vagrantegrate.Factory.Provisioning
 {
     public interface IShellProvisioning
     {

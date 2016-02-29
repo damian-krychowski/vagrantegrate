@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -7,9 +8,11 @@ namespace Vagrantegrate.Factory.VagrantFile
     {
         private readonly List<FileDefinition> _fileDefinitions = new List<FileDefinition>();
 
-        public void Add(string sourcePath, string destinationPath)
+        public void Add(Uri source, VagrantUri destination)
         {
-            _fileDefinitions.Add(new FileDefinition(sourcePath,destinationPath));    
+            _fileDefinitions.Add(new FileDefinition(
+                source.AbsolutePath, 
+                destination.AbsolutePath));
         }
 
         public StringBuilder AppendToVagrantFile(StringBuilder vagrantFileBuilder)

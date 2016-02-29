@@ -8,33 +8,45 @@ using System.Threading.Tasks;
 using System.Xml.XPath;
 using FluentAssertions;
 using NUnit.Framework;
+using Vagrantegrate.Tests.Infrastructure;
 
 namespace Vagrantegrate.Tests
 {
     [TestFixture]
     internal class VagrantTests
     {
-        [Test]
-        public void Can_create_vagrant_environment_witf_fiware_orion()
-        {
-            //Arrange
-            var sut = IntegrationTestEnvironment.Prepare();
+        private IVagrant vagrant;
 
-            //Act
-            var vagrant = sut.WithEnvironmentFolder(@"C:\Vagrant\Orion")
+        [OneTimeSetUp]
+        public void Prepare_vagrant_environment()
+        {
+            vagrant = IntegrationTestEnvironment.Prepare()
+                .WithEnvironmentFolder("C:/Vagrant/Orion")
                 .WithWily64()
                 .WithProvision(provision => provision
                     .WithDockerComposeProvisioning(dockercompose => dockercompose
-                        .WithDockerComposeFile(@"C:/Vagrant/docker-compose.yml", "./docker-compose.yml")))
+                        .WithDockerComposeFile(@"C:/Vagrant/docker-compose.yml", "./Orion/docker-compose.yml")))
                 .WithNetworking(networking => networking
                     .WithPortForwarded(1026, 1026))
                 .Prepare();
 
             vagrant.Up();
+        }
+
+        [Test]
+        public void Can_create_vagrant_environment_witf_fiware_orion()
+        {
+            //Act
+            var result = HttpGetRequest("http://localhost:1026/version");
 
             //Assert
-            var result = HttpGetRequest("http://localhost:1026/version");
             result.Should().Contain("<orion>").And.Contain("</orion>");
+        }
+
+        [OneTimeTearDown]
+        public void Destroy_vagrant_environment()
+        {
+            vagrant.Destroy();
         }
 
         private string HttpGetRequest(string url)

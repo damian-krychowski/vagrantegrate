@@ -1,8 +1,9 @@
-﻿namespace Vagrantegrate.Factory.VagrantBuildingSteps
+﻿using System;
+
+namespace Vagrantegrate.Factory.VagrantBuildingSteps
 {
     public interface IVagrantFactoryStepFolder
     {
-        IVagrantFactoryStepBox WithEnvironmentFolder(string path);
-        IVagrantFactoryStepBox WithDefaultLocation();
+        IVagrantFactoryStepBox WithEnvironmentFolder(string environmentFolderPath);
     }
 }

@@ -1,7 +1,9 @@
-﻿namespace Vagrantegrate.Factory.Provisioning
+﻿using System;
+
+namespace Vagrantegrate.Factory.Provisioning
 {
     public interface IDockerComposeProvisioning
     {
-        IDockerComposeProvisioning WithDockerComposeFile(string dockerComposePath, string destinationPath);
+        IDockerComposeProvisioning WithDockerComposeFile(string dockerComposeFilePath, string destinationPath);
     }
 }

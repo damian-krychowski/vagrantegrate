@@ -9,15 +9,15 @@ namespace Vagrantegrate.CommandLine
 {
     internal interface ICmdExecutor
     {
-        ICmdExecutor WithWorkingDirectory(string path);
+        ICmdExecutor WithWorkingDirectory(Uri path);
         void Execute(string command);
     }
 
     internal class CmdExecutor : ICmdExecutor
     {
-        private string _workingDirectory;
+        private Uri _workingDirectory;
 
-        public ICmdExecutor WithWorkingDirectory(string path)
+        public ICmdExecutor WithWorkingDirectory(Uri path)
         {
             _workingDirectory = path;
             return this;
@@ -27,7 +27,7 @@ namespace Vagrantegrate.CommandLine
         {
             var processStartInfo = new ProcessStartInfo("cmd.exe")
             {
-                WorkingDirectory = _workingDirectory,
+                WorkingDirectory = _workingDirectory.AbsolutePath,
                 Arguments = "/c " + command,
                 RedirectStandardOutput = false,
                 UseShellExecute = true,

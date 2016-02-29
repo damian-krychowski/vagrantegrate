@@ -1,4 +1,5 @@
-﻿using Vagrantegrate.Factory.VagrantFile;
+﻿using System;
+using Vagrantegrate.Factory.VagrantFile;
 
 namespace Vagrantegrate.Factory.Provisioning
 {
@@ -13,7 +14,9 @@ namespace Vagrantegrate.Factory.Provisioning
 
         public IShellProvisioning WithShellExternalScript(string scriptFilePath)
         {
-            _vagrantFile.Provision.Shell.AddExternalScript(scriptFilePath);
+            _vagrantFile.Provision.Shell.AddExternalScript(
+                new Uri(scriptFilePath));
+
             return this;
         }
 

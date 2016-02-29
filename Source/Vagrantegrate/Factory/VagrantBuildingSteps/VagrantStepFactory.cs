@@ -16,6 +16,7 @@ namespace Vagrantegrate.Factory.VagrantBuildingSteps
         private readonly ICmdExecutor _cmdExecutor;
         private readonly IProvisioningFactory _provisioningFactory;
         private readonly INetworkingFactory _networkingFactory;
+        private readonly IVagrantFileFactory _vagrantFileFactory;
         private readonly VagrantFileDefinition _vagrantFile;
 
         public VagrantStepFactory(
@@ -27,22 +28,18 @@ namespace Vagrantegrate.Factory.VagrantBuildingSteps
             _cmdExecutor = cmdExecutor;
             _provisioningFactory = provisioningFactory;
             _networkingFactory = networkingFactory;
+            _vagrantFileFactory = vagrantFileFactory;
 
-            _vagrantFile = new VagrantFileDefinition(vagrantFileFactory);
+            _vagrantFile = new VagrantFileDefinition();
         }
 
-        public IVagrantFactoryStepBox WithEnvironmentFolder(string path)
+        public IVagrantFactoryStepBox WithEnvironmentFolder(string environmentFolderPath)
         {
-            _vagrantFile.SetLocation(path);
+            _vagrantFile.SetLocation(new Uri(environmentFolderPath));
             return this;
         }
 
-        public IVagrantFactoryStepBox WithDefaultLocation()
-        {
-            return this;
-        }
-
-        public IVagrantFactoryStepFinalization WithVagrantfile(string vagrantfilePath)
+        public IVagrantFactoryStepFinalization WithVagrantfile(Uri vagrantfile)
         {
             throw new NotImplementedException();
         }
@@ -111,9 +108,12 @@ namespace Vagrantegrate.Factory.VagrantBuildingSteps
 
         public IVagrant Prepare()
         {
-            _vagrantFile.Save();
-          
-            return new Vagrant(_cmdExecutor, _vagrantFile.EnvironmentPath);
+            _vagrantFileFactory.Create(
+                _vagrantFile.ToString(), 
+                _vagrantFile.EnvironmentFolder.AbsolutePath, 
+                "VagrantFile");
+
+            return new Vagrant(_cmdExecutor, _vagrantFile.EnvironmentFolder);
         }
     }
 }

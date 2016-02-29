@@ -1,4 +1,5 @@
-﻿using Vagrantegrate.Factory.VagrantFile;
+﻿using System;
+using Vagrantegrate.Factory.VagrantFile;
 
 namespace Vagrantegrate.Factory.Provisioning
 {
@@ -13,7 +14,10 @@ namespace Vagrantegrate.Factory.Provisioning
 
         public IFileProvisioning WithFile(string sourcePath, string destinationPath)
         {
-            _vagrantFile.Provision.Files.Add(sourcePath, destinationPath);
+            _vagrantFile.Provision.Files.Add(
+                new Uri(sourcePath), 
+                new VagrantUri(destinationPath));
+
             return this;
         }
     }

@@ -6,25 +6,17 @@ namespace Vagrantegrate.Factory.VagrantFile
 {
     internal class VagrantFileDefinition
     {
-        private readonly IVagrantFileFactory _vagrantFileFactory;
-        private string _fileLocation;
+        
         private string _boxName;
 
         public ProvisionDefinition Provision { get; } = new ProvisionDefinition();
         public NetworkingDefinition Network { get; } = new NetworkingDefinition();
 
-        public string EnvironmentPath => _fileLocation;
+        public Uri EnvironmentFolder { get; private set; }
 
-        public VagrantFileDefinition(IVagrantFileFactory vagrantFileFactory)
+        public void SetLocation(Uri environmentFolder)
         {
-            _vagrantFileFactory = vagrantFileFactory;
-        }
-
-        public void SetLocation(string path)
-        {
-            CheckInput(path, nameof(path));
-
-            _fileLocation = path;
+            EnvironmentFolder = environmentFolder;
         }
 
         public void StartFromBox(string boxName)
@@ -38,14 +30,6 @@ namespace Vagrantegrate.Factory.VagrantFile
         {
             if (String.IsNullOrEmpty(inputValue)) throw new ArgumentException("Argument is null or empty", inputName);
         }
-
-        public void Save()
-        {
-            if(string.IsNullOrEmpty(_fileLocation)) throw new InvalidOperationException("VagrantFile location cannot be null or empty.");
-
-            _vagrantFileFactory.Create(ToString(), _fileLocation, "VagrantFile");
-        }
-        
 
         public override string ToString()
         {

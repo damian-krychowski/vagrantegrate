@@ -8,19 +8,17 @@ namespace Vagrantegrate.Factory.VagrantFile
         public FileProvisionDefinitions Files { get; } = new FileProvisionDefinitions();
         public DockerProvisionDefitions Docker { get; } = new DockerProvisionDefitions();
 
-        public void AddDockerComposeFile(string dockerComposeFilePath, LinuxUri destination)
+        public void AddDockerComposeFile(Uri dockerComposeFile, VagrantUri destination)
         {
-            CheckInput(dockerComposeFilePath, nameof(dockerComposeFilePath));
-
             Docker.Install();
 
-            Files.Add(dockerComposeFilePath, destination.File);
+            Files.Add(dockerComposeFile, destination);
             Shell.AddInlineScript("sudo apt-get update");
             Shell.AddInlineScript("sudo apt-get install docker-compose -y");
 
-            Shell.AddInlineScript(string.IsNullOrEmpty(destination.Path)
+            Shell.AddInlineScript(destination.IsFileLocatedInRoot()
                 ? "sudo docker-compose up -d"
-                : $"cd /{destination.Path} && sudo docker-compose up -d");
+                : $"cd {destination.LocationPathRelativeToRoot()} && sudo docker-compose up -d");
         }
 
         private static void CheckInput(string inputValue, string inputName)
