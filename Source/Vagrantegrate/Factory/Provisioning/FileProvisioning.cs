@@ -13,7 +13,7 @@ namespace Vagrantegrate.Factory.Provisioning
 
         public IFileProvisioning WithFile(string sourcePath, string destinationPath)
         {
-            _vagrantFile.AddFile(sourcePath, destinationPath);
+            _vagrantFile.Provision.Files.Add(sourcePath, destinationPath);
             return this;
         }
     }

@@ -4,23 +4,14 @@ using System.Text;
 
 namespace Vagrantegrate.Factory.VagrantFile
 {
-    internal interface IVagrantFileBuilder
-    {
-        StringBuilder AppendToVagrantFile(StringBuilder vagrantFileBuilder);
-    }
-
-
     internal class VagrantFileDefinition
     {
         private readonly IVagrantFileFactory _vagrantFileFactory;
         private string _fileLocation;
         private string _boxName;
-        private string _systemName;
 
-        private readonly ExposedPortDefinitions _exposedPorts = new ExposedPortDefinitions(); 
-        private readonly ShellProvisionDefinitions _shellProvisionDefinitions = new ShellProvisionDefinitions();
-        private readonly FileProvisionDefinitions _fileProvisionDefinitions = new FileProvisionDefinitions();
-        private readonly DockerProvisionDefitions _dockerProvisionDefitions = new DockerProvisionDefitions();
+        public ProvisionDefinition Provision { get; } = new ProvisionDefinition();
+        public NetworkingDefinition Network { get; } = new NetworkingDefinition();
 
         public string EnvironmentPath => _fileLocation;
 
@@ -42,59 +33,10 @@ namespace Vagrantegrate.Factory.VagrantFile
             _boxName = boxName;
         }
 
-        public void InitWith(string systemName)
-        {
-            CheckInput(systemName, nameof(systemName));
-            _systemName = systemName;
-        }
-
-        public void AddExposedPort(int guestPort, int hostPort)
-        {
-            _exposedPorts.Add(guestPort, hostPort);
-        }
-
-        public void AddShellExternalScript(string scriptFilePath)
-        {
-           CheckInput(scriptFilePath, nameof(scriptFilePath));
-
-          _shellProvisionDefinitions.AddExternalScript(scriptFilePath);
-        }
-
-        public void AddShellInlineScript(string inlineScriptBody)
-        {
-           _shellProvisionDefinitions.AddInlineScript(inlineScriptBody);
-        }
-
-        public void AddFile(string sourcePath, string destinationPath)
-        {
-            CheckInput(sourcePath, nameof(sourcePath));
-            CheckInput(destinationPath, nameof(destinationPath));
-
-            _fileProvisionDefinitions.AddFile(sourcePath, destinationPath);
-        }
-
-        public void AddDockerComposeFile(string dockerComposeFilePath, LinuxUri destination)
-        {
-            CheckInput(dockerComposeFilePath, nameof(dockerComposeFilePath));
-
-            InstallDocker();
-            AddFile(dockerComposeFilePath, destination.File);
-            AddShellInlineScript("sudo apt-get update");
-            AddShellInlineScript("sudo apt-get install docker-compose -y");
-
-            AddShellInlineScript(string.IsNullOrEmpty(destination.Path)
-                ? "sudo docker-compose up -d"
-                : $"cd /{destination.Path} && sudo docker-compose up -d");
-        }
 
         private static void CheckInput(string inputValue, string inputName)
         {
             if (String.IsNullOrEmpty(inputValue)) throw new ArgumentException("Argument is null or empty", inputName);
-        }
-
-        public void InstallDocker()
-        {
-            _dockerProvisionDefitions.Install();
         }
 
         public void Save()
@@ -112,18 +54,15 @@ namespace Vagrantegrate.Factory.VagrantFile
             AppendFileStart(builder);
             AppendBoxLineIfUsed(builder);
 
-            builder = _exposedPorts.AppendToVagrantFile(builder);
-            builder = _fileProvisionDefinitions.AppendToVagrantFile(builder);
-            builder = _dockerProvisionDefitions.AppendToVagrantFile(builder);
-            builder = _shellProvisionDefinitions.AppendToVagrantFile(builder);
+            builder = Network.ExposedPorts.AppendToVagrantFile(builder);
+            builder = Provision.Files.AppendToVagrantFile(builder);
+            builder = Provision.Docker.AppendToVagrantFile(builder);
+            builder = Provision.Shell.AppendToVagrantFile(builder);
 
             AppendFileEnd(builder);
 
             return builder.ToString();
         }
-
-
-
 
         private static void AppendFileEnd(StringBuilder builder)
         {

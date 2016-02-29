@@ -13,22 +13,19 @@ namespace Vagrantegrate.Factory.Provisioning
 
         public IShellProvisioning WithShellExternalScript(string scriptFilePath)
         {
-            _vagrantFile.AddShellExternalScript(scriptFilePath);
+            _vagrantFile.Provision.Shell.AddExternalScript(scriptFilePath);
             return this;
         }
 
         public IShellProvisioning WithShellInlineScript(string scriptBody)
         {
-            _vagrantFile.AddShellInlineScript(scriptBody);
+            _vagrantFile.Provision.Shell.AddInlineScript(scriptBody);
             return this;
         }
 
         public IShellProvisioning WithNodeJs()
         {
-            this.WithShellInlineScript("sudo add-apt-repository ppa:chris-lea/node.js")
-                .WithShellInlineScript("sudo apt-get update")
-                .WithShellInlineScript("sudo apt-get install nodejs -y")
-                .WithShellInlineScript("sudo npm install npm -g");
+            _vagrantFile.Provision.Shell.WithNodeJs();
 
             return this;
         }

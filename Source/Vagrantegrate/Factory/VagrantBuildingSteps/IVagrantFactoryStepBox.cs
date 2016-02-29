@@ -8,7 +8,6 @@ namespace Vagrantegrate.Factory.VagrantBuildingSteps
         IVagrantFactoryStepFinalization WithVagrantfile(string vagrantfilePath);
 
         IVagrantFactoryStepProvisioning WithBox(string boxName);
-        IVagrantFactoryStepProvisioning WithInit(string systemName);
         IVagrantFactoryStepProvisioning WithTrusty32();
         IVagrantFactoryStepProvisioning WithTrusty64();
         IVagrantFactoryStepProvisioning WithWily32();

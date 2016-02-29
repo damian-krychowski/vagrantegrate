@@ -63,8 +63,8 @@ namespace Vagrantegrate.Tests
             Fixture.Sut.SetLocation(@"C:/IntegrationTest/Vagrant/");
             Fixture.Sut.StartFromBox("hashicorp/precise64");
 
-            Fixture.Sut.AddExposedPort(10, 8010);
-            Fixture.Sut.AddExposedPort(32, 8032);
+            Fixture.Sut.Network.ExposedPorts.Add(10, 8010);
+            Fixture.Sut.Network.ExposedPorts.Add(32, 8032);
 
             //Act
             Fixture.Sut.Save();
@@ -86,8 +86,8 @@ namespace Vagrantegrate.Tests
             Fixture.Sut.SetLocation(@"C:/IntegrationTest/Vagrant/");
             Fixture.Sut.StartFromBox("hashicorp/precise64");
 
-            Fixture.Sut.AddShellInlineScript("sudo apt-get update");
-            Fixture.Sut.AddShellInlineScript("sudo apt-get install nano");
+            Fixture.Sut.Provision.Shell.AddInlineScript("sudo apt-get update");
+            Fixture.Sut.Provision.Shell.AddInlineScript("sudo apt-get install nano");
 
             //Act
             Fixture.Sut.Save();
@@ -111,8 +111,8 @@ namespace Vagrantegrate.Tests
             Fixture.Sut.SetLocation(@"C:/IntegrationTest/Vagrant/");
             Fixture.Sut.StartFromBox("hashicorp/precise64");
 
-            Fixture.Sut.AddShellExternalScript("https://example.com/provisioner.sh");
-            Fixture.Sut.AddShellExternalScript(@"C:\VagrantScripts\Test.sh");
+            Fixture.Sut.Provision.Shell.AddExternalScript("https://example.com/provisioner.sh");
+            Fixture.Sut.Provision.Shell.AddExternalScript(@"C:\VagrantScripts\Test.sh");
 
             //Act
             Fixture.Sut.Save();
@@ -134,8 +134,8 @@ namespace Vagrantegrate.Tests
             Fixture.Sut.SetLocation(@"C:/IntegrationTest/Vagrant/");
             Fixture.Sut.StartFromBox("hashicorp/precise64");
 
-            Fixture.Sut.AddDockerComposeFile(@"C:\VagrantScripts\Test1\docker-compose.yml", new LinuxUri("./First/docker-compose.yml"));
-            Fixture.Sut.AddDockerComposeFile(@"C:\VagrantScripts\Test2\docker-compose.yml", new LinuxUri("./Second/docker-compose.yml"));
+            Fixture.Sut.Provision.AddDockerComposeFile(@"C:\VagrantScripts\Test1\docker-compose.yml", new LinuxUri("./First/docker-compose.yml"));
+            Fixture.Sut.Provision.AddDockerComposeFile(@"C:\VagrantScripts\Test2\docker-compose.yml", new LinuxUri("./Second/docker-compose.yml"));
 
             //Act
             Fixture.Sut.Save();
@@ -164,8 +164,8 @@ namespace Vagrantegrate.Tests
             Fixture.Sut.SetLocation(@"C:/IntegrationTest/Vagrant/");
             Fixture.Sut.StartFromBox("hashicorp/precise64");
 
-            Fixture.Sut.AddFile(@"C:\Vagrant\File1", "~\\Copied\\File1");
-            Fixture.Sut.AddFile(@"C:\Vagrant\File2", "~\\Copied\\File2");
+            Fixture.Sut.Provision.Files.Add(@"C:\Vagrant\File1", "~\\Copied\\File1");
+            Fixture.Sut.Provision.Files.Add(@"C:\Vagrant\File2", "~\\Copied\\File2");
 
             //Act
             Fixture.Sut.Save();

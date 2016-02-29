@@ -53,12 +53,6 @@ namespace Vagrantegrate.Factory.VagrantBuildingSteps
             return this;
         }
 
-        public IVagrantFactoryStepProvisioning WithInit(string systemName)
-        {
-            _vagrantFile.InitWith(systemName);
-            return this;
-        }
-
         public IVagrantFactoryStepProvisioning WithTrusty32()
         {
             return WithBox("ubuntu/trusty32");

@@ -13,7 +13,7 @@ namespace Vagrantegrate.Factory.Provisioning
 
         public void Install()
         {
-            _vagrantFile.InstallDocker();
+            _vagrantFile.Provision.Docker.Install();
         }
     }
 }

@@ -18,7 +18,7 @@ namespace Vagrantegrate.Factory.Networking
 
         public INetworking WithPortForwarded(int guestPort, int hostPort)
         {
-            _vagrantFile.AddExposedPort(guestPort, hostPort);
+            _vagrantFile.Network.ExposedPorts.Add(guestPort, hostPort);
             return this;
         }
     }

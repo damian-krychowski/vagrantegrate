@@ -14,7 +14,7 @@ namespace Vagrantegrate.Factory.Provisioning
 
         public IDockerComposeProvisioning WithDockerComposeFile(string dockerComposePath, string destinationPath)
         {
-            _vagrantFile.AddDockerComposeFile(dockerComposePath, new LinuxUri(destinationPath));
+            _vagrantFile.Provision.AddDockerComposeFile(dockerComposePath, new LinuxUri(destinationPath));
             return this;
         }
     }

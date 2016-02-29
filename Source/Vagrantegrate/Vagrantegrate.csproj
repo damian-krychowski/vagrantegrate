@@ -47,6 +47,9 @@
     <Compile Include="Factory\Provisioning\IDockerComposeProvisioning.cs" />
     <Compile Include="Factory\Provisioning\IDockerProvisioning.cs" />
     <Compile Include="Factory\Provisioning\IFileProvisioning.cs" />
+    <Compile Include="Factory\VagrantFile\IVagrantFileBuilder.cs" />
+    <Compile Include="Factory\VagrantFile\NetworkingDefinition.cs" />
+    <Compile Include="Factory\VagrantFile\ProvisionDefinition.cs" />
     <Compile Include="Factory\VagrantFile\ShellProvisionDefinitions.cs" />
     <Compile Include="IntegrationTestEnvironment.cs" />
     <Compile Include="Factory\Provisioning\IShellProvisioning.cs" />

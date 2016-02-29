@@ -7,7 +7,7 @@ namespace Vagrantegrate.Factory.VagrantFile
     {
         private readonly List<FileDefinition> _fileDefinitions = new List<FileDefinition>();
 
-        public void AddFile(string sourcePath, string destinationPath)
+        public void Add(string sourcePath, string destinationPath)
         {
             _fileDefinitions.Add(new FileDefinition(sourcePath,destinationPath));    
         }
