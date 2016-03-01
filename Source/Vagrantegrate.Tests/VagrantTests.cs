@@ -13,6 +13,7 @@ using Vagrantegrate.Tests.Infrastructure;
 
 namespace Vagrantegrate.Tests
 {
+    [Explicit]
     [TestFixture]
     internal class VagrantTests
     {
@@ -22,12 +23,12 @@ namespace Vagrantegrate.Tests
         public void Prepare_vagrant_environment()
         {
             vagrant = IntegrationTestEnvironment.Prepare()
-                .InstallVagrantInFolder("C:/Vagrant/Orion")
+                .WithEnvironmentFolder("C:/Vagrant/Orion")
                 .WithWily64()
                 .WithProvision(provision => provision
-                    .WithDockerComposeProvisioning(dockercompose => dockercompose
+                    .WithDockerComposeProvisioning(dockercompose => dockercompose                   
                         .WithDockerComposeFile(orion => orion
-                            .From(@"C:/Vagrant/docker-compose.yml")
+                            .From(@"C:/Vagrant/OrionDocker/docker-compose.yml")
                             .To("./Orion/docker-compose.yml")
                             .IncludeContainingFolder())))
                 .WithNetworking(networking => networking

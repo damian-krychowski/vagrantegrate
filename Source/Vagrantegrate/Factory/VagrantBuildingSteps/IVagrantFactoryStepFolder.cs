@@ -4,6 +4,6 @@ namespace Vagrantegrate.Factory.VagrantBuildingSteps
 {
     public interface IVagrantFactoryStepFolder
     {
-        IVagrantFactoryStepBox InstallVagrantInFolder(string environmentFolderPath);
+        IVagrantFactoryStepBox WithEnvironmentFolder(string environmentFolderPath);
     }
 }

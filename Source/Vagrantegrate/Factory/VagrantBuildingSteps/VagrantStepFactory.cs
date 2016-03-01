@@ -33,7 +33,7 @@ namespace Vagrantegrate.Factory.VagrantBuildingSteps
             _vagrantFile = new VagrantFileDefinition();
         }
 
-        public IVagrantFactoryStepBox InstallVagrantInFolder(string environmentFolderPath)
+        public IVagrantFactoryStepBox WithEnvironmentFolder(string environmentFolderPath)
         {
             _vagrantFile.SetLocation(new Uri(environmentFolderPath));
             return this;

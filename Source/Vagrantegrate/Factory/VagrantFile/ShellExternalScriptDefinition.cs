@@ -8,5 +8,10 @@ namespace Vagrantegrate.Factory.VagrantFile
         {
             _scriptFilePath = scriptFilePath;
         }
+
+        public override string ToString()
+        {
+            return $"config.vm.provision :shell, path: \"{_scriptFilePath}\"";
+        }
     }
 }

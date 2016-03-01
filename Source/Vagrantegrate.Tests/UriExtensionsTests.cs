@@ -19,7 +19,7 @@ namespace Vagrantegrate.Tests
             var uri = new Uri("C:/FileFolder/FileDeeperFolder/File.txt");
 
             //Act
-            var folderPath = uri.FileLocationUri();
+            var folderPath = uri.FolderUri();
 
             //Assert
             folderPath.Should().Be(new Uri("C:/FileFolder/FileDeeperFolder/"));

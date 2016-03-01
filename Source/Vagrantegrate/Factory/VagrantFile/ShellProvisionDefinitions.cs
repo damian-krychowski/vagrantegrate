@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Vagrantegrate.Factory.Provisioning;
-using Vagrantegrate.Linux;
+using Vagrantegrate.Scripts;
 
 namespace Vagrantegrate.Factory.VagrantFile
 {
@@ -38,6 +39,11 @@ namespace Vagrantegrate.Factory.VagrantFile
             if (_shellInlineScriptDefinition.WasUsed)
             {
                 vagrantFileBuilder.Append(_shellInlineScriptDefinition.ToString());
+            }
+
+            foreach (var external in _shellExternalScriptDefinitions)
+            {
+                vagrantFileBuilder.AppendLine(external.ToString());
             }
           
             return vagrantFileBuilder;

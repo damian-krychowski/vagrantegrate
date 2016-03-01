@@ -129,7 +129,7 @@ namespace Vagrantegrate.Tests
                     "Vagrant.configure(2) do |config|" + Environment.NewLine +
                     "config.vm.box = \"hashicorp/precise64\"" + Environment.NewLine +
                     "config.vm.provision :shell, path: \"https://example.com/provisioner.sh\"" + Environment.NewLine +
-                    "config.vm.provision :shell, path: \"C:\\VagrantScripts\\Test.sh\"" + Environment.NewLine +
+                    "config.vm.provision :shell, path: \"C:/VagrantScripts/Test.sh\"" + Environment.NewLine +
                     "end");
         }
 
@@ -142,11 +142,13 @@ namespace Vagrantegrate.Tests
 
             Fixture.Sut.Provision.AddDockerComposeFile(
                 new Uri(@"C:\VagrantScripts\Test1\docker-compose.yml"),
-                new VagrantUri("./First/docker-compose.yml"));
+                new VagrantUri("./First/docker-compose.yml"),
+                false);
 
             Fixture.Sut.Provision.AddDockerComposeFile(
                 new Uri(@"C:\VagrantScripts\Test2\docker-compose.yml"),
-                new VagrantUri("./Second/docker-compose.yml"));
+                new VagrantUri("./Second/docker-compose.yml"),
+                false);
 
             //Act
             Fixture.SaveVagrantFile();

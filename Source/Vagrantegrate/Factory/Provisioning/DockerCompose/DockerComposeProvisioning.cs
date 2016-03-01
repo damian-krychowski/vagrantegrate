@@ -20,12 +20,8 @@ namespace Vagrantegrate.Factory.Provisioning.DockerCompose
 
             _vagrantFile.Provision.AddDockerComposeFile(
                 new Uri(builder.DockerComposeFileSource),
-                new VagrantUri(builder.DockerComposeFileDestination));
-
-            if (builder.ShouldIncludeFolder)
-            {
-                throw new NotImplementedException();
-            }
+                new VagrantUri(builder.DockerComposeFileDestination),
+                builder.ShouldIncludeFolder);
 
             return this;
         }

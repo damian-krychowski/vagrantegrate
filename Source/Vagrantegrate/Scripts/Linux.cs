@@ -1,4 +1,4 @@
-namespace Vagrantegrate.Linux
+namespace Vagrantegrate.Scripts
 {
     internal static class Linux
     {

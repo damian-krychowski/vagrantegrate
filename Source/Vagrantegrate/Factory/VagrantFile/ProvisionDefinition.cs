@@ -1,4 +1,5 @@
 using System;
+using Vagrantegrate.Scripts;
 
 namespace Vagrantegrate.Factory.VagrantFile
 {
@@ -8,17 +9,27 @@ namespace Vagrantegrate.Factory.VagrantFile
         public FileProvisionDefinitions Files { get; } = new FileProvisionDefinitions();
         public DockerProvisionDefitions Docker { get; } = new DockerProvisionDefitions();
 
-        public void AddDockerComposeFile(Uri dockerComposeFile, VagrantUri destination)
+        public void AddDockerComposeFile(Uri dockerComposeFile, VagrantUri destination, bool includeFolder)
         {
             Docker.Install();
 
-            Files.Add(dockerComposeFile, destination);
-            Shell.AddInlineScript(Linux.Linux.AptGet.Update);
-            Shell.AddInlineScript(Linux.Linux.AptGet.Install.DockerCompose);
+            if (includeFolder)
+            {
+                Files.Add(
+                    dockerComposeFile.FolderUri(),
+                    destination.FolderUri());
+            }
+            else
+            {
+                Files.Add(dockerComposeFile, destination);
+            }
+          
+            Shell.AddInlineScript(Linux.AptGet.Update);
+            Shell.AddInlineScript(Linux.AptGet.Install.DockerCompose);
 
             Shell.AddInlineScript(destination.IsFileLocatedInRoot()
-                ? Linux.Linux.Docker.Compose.Up
-                : Linux.Linux.Cd(destination.LocationPathRelativeToRoot()).And(Linux.Linux.Docker.Compose.Up));
+                ? Linux.Docker.Compose.Up
+                : Linux.Cd(destination.LocationPathRelativeToRoot()).And(Linux.Docker.Compose.Up));
         }
 
         private static void CheckInput(string inputValue, string inputName)
