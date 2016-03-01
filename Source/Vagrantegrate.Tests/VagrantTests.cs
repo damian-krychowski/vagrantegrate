@@ -22,11 +22,14 @@ namespace Vagrantegrate.Tests
         public void Prepare_vagrant_environment()
         {
             vagrant = IntegrationTestEnvironment.Prepare()
-                .WithEnvironmentFolder("C:/Vagrant/Orion")
+                .InstallVagrantInFolder("C:/Vagrant/Orion")
                 .WithWily64()
                 .WithProvision(provision => provision
                     .WithDockerComposeProvisioning(dockercompose => dockercompose
-                        .WithDockerComposeFile(@"C:/Vagrant/docker-compose.yml", "./Orion/docker-compose.yml")))
+                        .WithDockerComposeFile(orion => orion
+                            .From(@"C:/Vagrant/docker-compose.yml")
+                            .To("./Orion/docker-compose.yml")
+                            .IncludeContainingFolder())))
                 .WithNetworking(networking => networking
                     .WithPortForwarded(1026, 1026))
                 .Prepare();

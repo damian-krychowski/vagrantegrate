@@ -13,12 +13,12 @@ namespace Vagrantegrate.Factory.VagrantFile
             Docker.Install();
 
             Files.Add(dockerComposeFile, destination);
-            Shell.AddInlineScript(Linux.AptGet.Update);
-            Shell.AddInlineScript(Linux.AptGet.Install.DockerCompose);
+            Shell.AddInlineScript(Linux.Linux.AptGet.Update);
+            Shell.AddInlineScript(Linux.Linux.AptGet.Install.DockerCompose);
 
             Shell.AddInlineScript(destination.IsFileLocatedInRoot()
-                ? Linux.Docker.Compose.Up
-                : Linux.Cd(destination.LocationPathRelativeToRoot()).And(Linux.Docker.Compose.Up));
+                ? Linux.Linux.Docker.Compose.Up
+                : Linux.Linux.Cd(destination.LocationPathRelativeToRoot()).And(Linux.Linux.Docker.Compose.Up));
         }
 
         private static void CheckInput(string inputValue, string inputName)

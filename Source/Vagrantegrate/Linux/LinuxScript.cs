@@ -1,4 +1,4 @@
-namespace Vagrantegrate.Factory.VagrantFile
+namespace Vagrantegrate.Linux
 {
     internal class LinuxScript
     {

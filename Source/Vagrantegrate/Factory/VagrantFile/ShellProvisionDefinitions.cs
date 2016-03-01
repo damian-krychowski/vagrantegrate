@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Vagrantegrate.Factory.Provisioning;
+using Vagrantegrate.Linux;
 
 namespace Vagrantegrate.Factory.VagrantFile
 {

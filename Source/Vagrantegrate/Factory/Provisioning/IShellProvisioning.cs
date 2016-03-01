@@ -14,17 +14,17 @@ namespace Vagrantegrate.Factory.Provisioning
         public static IShellProvisioning WithNodeJs(this IShellProvisioning provisioning)
         {
             return provisioning
-                .WithShellInlineScript(Linux.AptGet.AddRepository("ppa:chris-lea/node.js").ToString())
-                .WithShellInlineScript(Linux.AptGet.Update.ToString())
-                .WithShellInlineScript(Linux.AptGet.Install.NodeJs.ToString())
-                .WithShellInlineScript(Linux.Npm.Install.Npm.ToString());
+                .WithShellInlineScript(Linux.Linux.AptGet.AddRepository("ppa:chris-lea/node.js").ToString())
+                .WithShellInlineScript(Linux.Linux.AptGet.Update.ToString())
+                .WithShellInlineScript(Linux.Linux.AptGet.Install.NodeJs.ToString())
+                .WithShellInlineScript(Linux.Linux.Npm.Install.Npm.ToString());
         }
 
         public static IShellProvisioning WithMongoDb(this IShellProvisioning provisioning)
         {
             return provisioning
-                .WithShellInlineScript(Linux.AptGet.Update.ToString())
-                .WithShellInlineScript(Linux.AptGet.Install.MongoDb.ToString());
+                .WithShellInlineScript(Linux.Linux.AptGet.Update.ToString())
+                .WithShellInlineScript(Linux.Linux.AptGet.Install.MongoDb.ToString());
         }
     }
 }

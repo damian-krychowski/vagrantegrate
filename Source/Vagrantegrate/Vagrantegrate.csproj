@@ -38,13 +38,17 @@
     <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Factory\Provisioning\DockerComposeProvisioning.cs" />
+    <Compile Include="Factory\Provisioning\DockerCompose\DockerComposeProvisioning.cs" />
+    <Compile Include="Factory\Provisioning\DockerCompose\DockerComposeProvisioningBuilder.cs" />
+    <Compile Include="Factory\Provisioning\DockerCompose\IDockerComposeProvisioningDestination.cs" />
+    <Compile Include="Factory\Provisioning\DockerCompose\IDockerComposeProvisioningFolder.cs" />
+    <Compile Include="Factory\Provisioning\DockerCompose\IDockerComposeProvisioningSource.cs" />
     <Compile Include="Factory\Provisioning\DockerProvisioning.cs" />
     <Compile Include="Factory\IVagrantFileFactory.cs" />
     <Compile Include="Factory\VagrantFile\DockerProvisionDefitions.cs" />
     <Compile Include="Factory\VagrantFile\FileDefinition.cs" />
     <Compile Include="Factory\Provisioning\FileProvisioning.cs" />
-    <Compile Include="Factory\Provisioning\IDockerComposeProvisioning.cs" />
+    <Compile Include="Factory\Provisioning\DockerCompose\IDockerComposeProvisioning.cs" />
     <Compile Include="Factory\Provisioning\IDockerProvisioning.cs" />
     <Compile Include="Factory\Provisioning\IFileProvisioning.cs" />
     <Compile Include="Factory\VagrantFile\IVagrantFileBuilder.cs" />

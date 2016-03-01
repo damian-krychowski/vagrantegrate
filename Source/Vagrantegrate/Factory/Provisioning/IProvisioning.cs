@@ -1,4 +1,5 @@
 ﻿using System;
+using Vagrantegrate.Factory.Provisioning.DockerCompose;
 
 namespace Vagrantegrate.Factory.Provisioning
 {
