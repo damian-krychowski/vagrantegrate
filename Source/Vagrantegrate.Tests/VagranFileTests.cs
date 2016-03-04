@@ -9,6 +9,7 @@ using NUnit.Framework.Internal;
 using NUnit.Framework;
 using Vagrantegrate.Factory;
 using Vagrantegrate.Factory.VagrantFile;
+using Vagrantegrate.Factory.VagrantFile.Providers;
 using Vagrantegrate.Tests.Infrastructure;
 
 namespace Vagrantegrate.Tests
@@ -191,6 +192,40 @@ namespace Vagrantegrate.Tests
                     "config.vm.box = \"hashicorp/precise64\"" + Environment.NewLine +
                     "config.vm.provision :file, source: \"C:/Vagrant/File1\", destination: \"./Copied/File1\"" + Environment.NewLine +
                     "config.vm.provision :file, source: \"C:/Vagrant/File2\", destination: \"./Copied/File2\"" + Environment.NewLine +
+                    "end");
+        }
+
+        [Test]
+        public void Can_use_virtual_box_provider()
+        {
+            //Arrange
+            Fixture.Sut.SetLocation(new Uri(@"C:/IntegrationTest/Vagrant/"));
+            Fixture.Sut.StartFromBox("hashicorp/precise64");
+
+            Fixture.Sut.Provider = new VirtualBoxProviderDefinition
+            {
+                Cpus = 3,
+                Memory = 4096,
+                Customizations = Enumerable.Empty<VirtualBoxCustomization>(), //not implemented yet
+                ShouldUseLinkedClones = true,
+                VirtualMachineName = "test"
+            };
+
+            //Act
+            Fixture.SaveVagrantFile();
+
+            //Assert
+            Fixture.ReadVagrantFileContent(@"C:/IntegrationTest/Vagrant/VagrantFile")
+                .Should().BeEquivalentTo(
+                    "Vagrant.configure(2) do |config|" + Environment.NewLine +
+                    "config.vm.box = \"hashicorp/precise64\"" + Environment.NewLine +
+                    "config.vm.provider \"virtualbox\" do |v|" + Environment.NewLine +
+                    "v.gui = false" + Environment.NewLine +
+                    "v.name = \"test\"" + Environment.NewLine +
+                    "v.linked_clone = true" + Environment.NewLine +
+                    "v.memory = 4096" + Environment.NewLine +
+                    "v.cpus = 3" + Environment.NewLine +
+                    "end" + Environment.NewLine +
                     "end");
         }
     }

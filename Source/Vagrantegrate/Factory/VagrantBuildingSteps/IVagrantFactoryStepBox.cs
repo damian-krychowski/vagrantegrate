@@ -7,12 +7,12 @@ namespace Vagrantegrate.Factory.VagrantBuildingSteps
     {
         IVagrantFactoryStepFinalization WithVagrantfile(string vagrantfile);
 
-        IVagrantFactoryStepProvisioning WithBox(string boxName);
-        IVagrantFactoryStepProvisioning WithTrusty32();
-        IVagrantFactoryStepProvisioning WithTrusty64();
-        IVagrantFactoryStepProvisioning WithWily32();
-        IVagrantFactoryStepProvisioning WithWily64();
-        IVagrantFactoryStepProvisioning WithPrecise32();
-        IVagrantFactoryStepProvisioning WithPrecise64();
+        IVagrantFactoryStepProvider WithBox(string boxName);
+        IVagrantFactoryStepProvider WithTrusty32();
+        IVagrantFactoryStepProvider WithTrusty64();
+        IVagrantFactoryStepProvider WithWily32();
+        IVagrantFactoryStepProvider WithWily64();
+        IVagrantFactoryStepProvider WithPrecise32();
+        IVagrantFactoryStepProvider WithPrecise64();
     }
 }

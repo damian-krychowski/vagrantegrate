@@ -4,6 +4,21 @@ using System.Text;
 
 namespace Vagrantegrate.Factory.VagrantFile
 {
+    internal class VirtualBoxCustomization : IVagrantFileBuilder
+    {
+        private readonly string[] _commandParts;
+
+        public VirtualBoxCustomization(string[] commandParts)
+        {
+            _commandParts = commandParts;
+        }
+
+        public StringBuilder AppendToVagrantFile(StringBuilder vagrantFileBuilder)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     internal class VagrantFileDefinition
     {
         
@@ -11,6 +26,7 @@ namespace Vagrantegrate.Factory.VagrantFile
 
         public ProvisionDefinition Provision { get; } = new ProvisionDefinition();
         public NetworkingDefinition Network { get; } = new NetworkingDefinition();
+        public ProviderDefinition Provider { get; set; }
 
         public Uri EnvironmentFolder { get; private set; }
 
@@ -37,6 +53,7 @@ namespace Vagrantegrate.Factory.VagrantFile
 
             AppendFileStart(builder);
             AppendBoxLineIfUsed(builder);
+            AppendProvider(builder);
 
             builder = Network.ExposedPorts.AppendToVagrantFile(builder);
             builder = Provision.Files.AppendToVagrantFile(builder);
@@ -46,6 +63,11 @@ namespace Vagrantegrate.Factory.VagrantFile
             AppendFileEnd(builder);
 
             return builder.ToString();
+        }
+
+        private void AppendProvider(StringBuilder builder)
+        {
+            Provider?.AppendToVagrantFile(builder);
         }
 
         private static void AppendFileEnd(StringBuilder builder)

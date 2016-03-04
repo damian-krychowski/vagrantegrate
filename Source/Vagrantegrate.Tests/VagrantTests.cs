@@ -25,6 +25,10 @@ namespace Vagrantegrate.Tests
             _vagrant = IntegrationTestEnvironment.Prepare()
                 .WithEnvironmentFolder("C:/Vagrant/Orion")
                 .WithWily64()
+                .UseVirtualBox(virtualBox => virtualBox
+                    .WithMemory(2048)
+                    .WithCpus(2)
+                    .WithVmName("VagrantForOrion"))
                 .WithProvision(provision => provision
                     .WithDockerComposeProvisioning(dockercompose => dockercompose                   
                         .WithDockerComposeFile(orion => orion
@@ -35,6 +39,7 @@ namespace Vagrantegrate.Tests
                     .WithPortForwarded(1026, 1026))
                 .CheckAndPrepare();
 
+            _vagrant.Destroy();
             _vagrant.Up();
         }
 
@@ -46,12 +51,6 @@ namespace Vagrantegrate.Tests
 
             //Assert
             result.Should().Contain("<orion>").And.Contain("</orion>");
-        }
-
-        [OneTimeTearDown]
-        public void Destroy_vagrant_environment()
-        {
-            _vagrant.Destroy();
         }
 
         private string HttpGetRequest(string url)

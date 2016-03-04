@@ -39,6 +39,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Factory\Assumptions\IDefinitionAssumptions.cs" />
+    <Compile Include="Factory\Provisioner\VirtualBox\IVirtualBoxProvider.cs" />
+    <Compile Include="Factory\Provisioner\VirtualBox\VirtualBoxProvider.cs" />
     <Compile Include="Factory\Provisioning\DockerCompose\DockerComposeProvisioning.cs" />
     <Compile Include="Factory\Provisioning\DockerCompose\DockerComposeProvisioningBuilder.cs" />
     <Compile Include="Factory\Provisioning\DockerCompose\IDockerComposeProvisioningDestination.cs" />
@@ -46,6 +48,7 @@
     <Compile Include="Factory\Provisioning\DockerCompose\IDockerComposeProvisioningSource.cs" />
     <Compile Include="Factory\Provisioning\DockerProvisioning.cs" />
     <Compile Include="Factory\IVagrantFileFactory.cs" />
+    <Compile Include="Factory\VagrantBuildingSteps\IVagrantFactoryStepProvider.cs" />
     <Compile Include="Factory\VagrantFile\DockerProvisionDefitions.cs" />
     <Compile Include="Factory\VagrantFile\FileDefinition.cs" />
     <Compile Include="Factory\Provisioning\FileProvisioning.cs" />
@@ -53,6 +56,8 @@
     <Compile Include="Factory\Provisioning\IDockerProvisioning.cs" />
     <Compile Include="Factory\Provisioning\IFileProvisioning.cs" />
     <Compile Include="Factory\VagrantFile\IVagrantFileBuilder.cs" />
+    <Compile Include="Factory\VagrantFile\Providers\ProviderDefinition.cs" />
+    <Compile Include="Factory\VagrantFile\Providers\VirtualBoxProviderDefinition.cs" />
     <Compile Include="Scripts\Linux.cs" />
     <Compile Include="Scripts\LinuxScript.cs" />
     <Compile Include="Factory\VagrantFile\NetworkingDefinition.cs" />
@@ -78,6 +83,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Factory\Provisioning\Provisioning.cs" />
     <Compile Include="Factory\Provisioning\ShellProvisioning.cs" />
+    <Compile Include="StringBuilderExtensions.cs" />
     <Compile Include="UriExtensions.cs" />
     <Compile Include="VagrantUri.cs" />
   </ItemGroup>
