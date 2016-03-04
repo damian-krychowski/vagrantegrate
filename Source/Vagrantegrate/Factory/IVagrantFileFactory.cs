@@ -13,17 +13,7 @@ namespace Vagrantegrate.Factory
     {
         public void Create(string fileContent, string filePath, string fileName)
         {
-            if (Directory.Exists(filePath))
-            {
-                Directory.CreateDirectory(filePath).Empty();
-            }
-
-            if (File.Exists(filePath))
-            {
-                File.Delete(filePath);
-            }
-
-            Directory.CreateDirectory(filePath);
+            Directory.CreateDirectory(filePath).Empty();
 
             using (var fs = File.Create(filePath + "\\" + fileName))
             {
@@ -35,10 +25,10 @@ namespace Vagrantegrate.Factory
 
     internal static class DirectoryExtensions
     {
-        public static void Empty(this System.IO.DirectoryInfo directory)
+        public static void Empty(this DirectoryInfo directory)
         {
-            foreach (System.IO.FileInfo file in directory.GetFiles()) file.Delete();
-            foreach (System.IO.DirectoryInfo subDirectory in directory.GetDirectories()) subDirectory.Delete(true);
+            foreach (FileInfo file in directory.GetFiles()) file.Delete();
+            foreach (var subDirectory in directory.GetDirectories()) subDirectory.Delete(true);
         }
     }
 

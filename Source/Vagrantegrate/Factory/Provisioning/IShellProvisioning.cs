@@ -27,5 +27,11 @@ namespace Vagrantegrate.Factory.Provisioning
                 .WithShellInlineScript(Linux.AptGet.Update.ToString())
                 .WithShellInlineScript(Linux.AptGet.Install.MongoDb.ToString());
         }
+
+        public static IShellProvisioning WithEnv(this IShellProvisioning provisioning,
+            string name, string value)
+        {
+            return provisioning.WithShellInlineScript(Linux.Export(name, value).ToString());
+        }
     }
 }

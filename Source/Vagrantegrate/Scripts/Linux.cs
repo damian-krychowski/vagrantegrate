@@ -3,6 +3,7 @@ namespace Vagrantegrate.Scripts
     internal static class Linux
     {
         public static LinuxScript Cd(string path) => new LinuxScript($"cd {path}");
+        public static LinuxScript Export(string name, string value)=> new LinuxScript($"export {name}={value}");
 
         internal static class AptGet
         {
