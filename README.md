@@ -28,7 +28,7 @@ Vagrantegrate is a library allowing to prepare and start virtual machines hosted
         vagrant.Up();
     }
 ```
-The example presents simple environment prepared to host an example linux component. There are several steps performed:
+The piece of code presents simple environment prepared to host an example linux component. There are several steps performed:
 - location for vagrant machine is selected
 - base-box is selected
 - virtual machine settings (like available memory, cpus etc.) are chosen
