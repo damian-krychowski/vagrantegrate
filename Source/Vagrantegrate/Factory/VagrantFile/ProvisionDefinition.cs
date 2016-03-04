@@ -25,7 +25,8 @@ namespace Vagrantegrate.Factory.VagrantFile
             }
           
             Shell.AddInlineScript(Linux.AptGet.Update);
-            Shell.AddInlineScript(Linux.AptGet.Install.DockerCompose);
+            Shell.AddInlineScript(Linux.AptGet.Install.Pip);
+            Shell.AddInlineScript(Linux.Pip.Install.DockerCompose);
 
             Shell.AddInlineScript(destination.IsFileLocatedInRoot()
                 ? Linux.Docker.Compose.Up

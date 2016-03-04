@@ -1,4 +1,5 @@
 ﻿using System;
+using Vagrantegrate.Factory.Assumptions;
 using Vagrantegrate.Factory.VagrantFile;
 
 namespace Vagrantegrate.Factory.Provisioning
@@ -6,14 +7,20 @@ namespace Vagrantegrate.Factory.Provisioning
     internal class ShellProvisioning : IShellProvisioning
     {
         private readonly VagrantFileDefinition _vagrantFile;
+        private readonly IDefinitionAssumptions _definitionAssumptions;
 
-        public ShellProvisioning(VagrantFileDefinition vagrantFile)
+        public ShellProvisioning(
+            VagrantFileDefinition vagrantFile,
+            IDefinitionAssumptions definitionAssumptions)
         {
             _vagrantFile = vagrantFile;
+            _definitionAssumptions = definitionAssumptions;
         }
 
         public IShellProvisioning WithShellExternalScript(string scriptFilePath)
         {
+            _definitionAssumptions.AssumeFileExists(scriptFilePath);
+
             _vagrantFile.Provision.Shell.AddExternalScript(
                 new Uri(scriptFilePath));
 

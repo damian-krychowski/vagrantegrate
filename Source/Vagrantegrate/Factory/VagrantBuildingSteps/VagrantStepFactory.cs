@@ -1,5 +1,6 @@
 using System;
 using Vagrantegrate.CommandLine;
+using Vagrantegrate.Factory.Assumptions;
 using Vagrantegrate.Factory.Networking;
 using Vagrantegrate.Factory.Provisioning;
 using Vagrantegrate.Factory.VagrantFile;
@@ -14,33 +15,35 @@ namespace Vagrantegrate.Factory.VagrantBuildingSteps
         IVagrantFactoryStepFinalization
     {
         private readonly ICmdExecutor _cmdExecutor;
-        private readonly IProvisioningFactory _provisioningFactory;
         private readonly INetworkingFactory _networkingFactory;
         private readonly IVagrantFileFactory _vagrantFileFactory;
+        private readonly IDefinitionAssumptions _definitionAssumptions;
         private readonly VagrantFileDefinition _vagrantFile;
 
         public VagrantStepFactory(
             ICmdExecutor cmdExecutor,
-            IProvisioningFactory provisioningFactory,
             INetworkingFactory networkingFactory,
-            IVagrantFileFactory vagrantFileFactory)
+            IVagrantFileFactory vagrantFileFactory,
+            IDefinitionAssumptions definitionAssumptions)
         {
             _cmdExecutor = cmdExecutor;
-            _provisioningFactory = provisioningFactory;
             _networkingFactory = networkingFactory;
             _vagrantFileFactory = vagrantFileFactory;
+            _definitionAssumptions = definitionAssumptions;
 
             _vagrantFile = new VagrantFileDefinition();
         }
 
         public IVagrantFactoryStepBox WithEnvironmentFolder(string environmentFolderPath)
         {
+            _definitionAssumptions.AssumeDirectoryExists(environmentFolderPath);
             _vagrantFile.SetLocation(new Uri(environmentFolderPath));
             return this;
         }
 
-        public IVagrantFactoryStepFinalization WithVagrantfile(Uri vagrantfile)
+        public IVagrantFactoryStepFinalization WithVagrantfile(string vagrantfile)
         {
+            _definitionAssumptions.AssumeFileExists(vagrantfile);
             throw new NotImplementedException();
         }
 
@@ -82,7 +85,7 @@ namespace Vagrantegrate.Factory.VagrantBuildingSteps
 
         public IVagrantFactoryStepNetworking WithProvision(Action<IProvisioning> provisioning)
         {
-            var provision = _provisioningFactory.Create(_vagrantFile);
+            var provision = new Provisioning.Provisioning(_vagrantFile, _definitionAssumptions);
             provisioning(provision);
 
             return this;
@@ -104,6 +107,12 @@ namespace Vagrantegrate.Factory.VagrantBuildingSteps
         public IVagrantFactoryStepFinalization NoNetworking()
         {
             return this;
+        }
+
+        public IVagrant CheckAndPrepare()
+        {
+            _definitionAssumptions.CheckAssumptions();
+            return Prepare();
         }
 
         public IVagrant Prepare()

@@ -1,4 +1,5 @@
 ﻿using System;
+using Vagrantegrate.Factory.Assumptions;
 using Vagrantegrate.Factory.Provisioning.DockerCompose;
 using Vagrantegrate.Factory.VagrantFile;
 
@@ -11,12 +12,14 @@ namespace Vagrantegrate.Factory.Provisioning
         private readonly IDockerComposeProvisioning _dockerComposeProvisioning;
         private readonly IFileProvisioning _fileProvisioning;
         
-        public Provisioning(VagrantFileDefinition vagrantFile)
+        public Provisioning(
+            VagrantFileDefinition vagrantFile,
+            IDefinitionAssumptions definitionAssumptions)
         {
-            _shellProvisioning = new ShellProvisioning(vagrantFile);
+            _shellProvisioning = new ShellProvisioning(vagrantFile, definitionAssumptions);
             _dockerProvisioning = new DockerProvisioning(vagrantFile);
-            _dockerComposeProvisioning = new DockerComposeProvisioning(vagrantFile);
-            _fileProvisioning = new FileProvisioning(vagrantFile);
+            _dockerComposeProvisioning = new DockerComposeProvisioning(vagrantFile, definitionAssumptions);
+            _fileProvisioning = new FileProvisioning(vagrantFile, definitionAssumptions);
            
         }
 

@@ -11,6 +11,7 @@ namespace Vagrantegrate.Scripts
             
             internal static class Install
             {
+                public static LinuxScript Pip => new LinuxScript("sudo apt-get install python-pip -y");
                 public static LinuxScript DockerCompose => new LinuxScript("sudo apt-get install docker-compose -y");
                 public static LinuxScript NodeJs => new LinuxScript("sudo apt-get install nodejs -y");
                 public static LinuxScript MongoDb => new LinuxScript("sudo apt-get install mongodb-org -y");
@@ -30,6 +31,14 @@ namespace Vagrantegrate.Scripts
             internal static class Install
             {
                 public static LinuxScript Npm => new LinuxScript("sudo npm install npm -g");
+            }
+        }
+
+        internal static class Pip
+        {
+            internal static class Install
+            {
+                public static LinuxScript DockerCompose => new LinuxScript("sudo pip install docker-compose");
             }
         }
     }

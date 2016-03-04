@@ -5,7 +5,7 @@ namespace Vagrantegrate.Factory.VagrantBuildingSteps
 {
     public interface IVagrantFactoryStepBox
     {
-        IVagrantFactoryStepFinalization WithVagrantfile(Uri vagrantfile);
+        IVagrantFactoryStepFinalization WithVagrantfile(string vagrantfile);
 
         IVagrantFactoryStepProvisioning WithBox(string boxName);
         IVagrantFactoryStepProvisioning WithTrusty32();

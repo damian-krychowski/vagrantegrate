@@ -17,12 +17,12 @@ namespace Vagrantegrate.Tests
     [TestFixture]
     internal class VagrantTests
     {
-        private IVagrant vagrant;
+        private IVagrant _vagrant;
 
         [OneTimeSetUp]
         public void Prepare_vagrant_environment()
         {
-            vagrant = IntegrationTestEnvironment.Prepare()
+            _vagrant = IntegrationTestEnvironment.Prepare()
                 .WithEnvironmentFolder("C:/Vagrant/Orion")
                 .WithWily64()
                 .WithProvision(provision => provision
@@ -33,9 +33,9 @@ namespace Vagrantegrate.Tests
                             .IncludeContainingFolder())))
                 .WithNetworking(networking => networking
                     .WithPortForwarded(1026, 1026))
-                .Prepare();
+                .CheckAndPrepare();
 
-            vagrant.Up();
+            _vagrant.Up();
         }
 
         [Test]
@@ -51,7 +51,7 @@ namespace Vagrantegrate.Tests
         [OneTimeTearDown]
         public void Destroy_vagrant_environment()
         {
-            vagrant.Destroy();
+            _vagrant.Destroy();
         }
 
         private string HttpGetRequest(string url)

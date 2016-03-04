@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vagrantegrate.CommandLine;
 using Vagrantegrate.Factory;
+using Vagrantegrate.Factory.Assumptions;
 using Vagrantegrate.Factory.Networking;
 using Vagrantegrate.Factory.Provisioning;
 using Vagrantegrate.Factory.VagrantBuildingSteps;
@@ -15,11 +16,15 @@ namespace Vagrantegrate
     {
         public static IVagrantFactoryStepFolder Prepare()
         {
+            var assumptions = new DefinitionAssumptions();
+
+            assumptions.AssumeVagrantInstalled();
+
             return new VagrantStepFactory(
-                new CmdExecutor(), 
-                new ProvisioningFactory(), 
+                new CmdExecutor(),
                 new NetworkingFactory(),
-                new VagrantFileFactory());
+                new VagrantFileFactory(), 
+                assumptions);
         }
     }
 }

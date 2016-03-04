@@ -163,7 +163,8 @@ namespace Vagrantegrate.Tests
                     "config.vm.provision :docker" + Environment.NewLine +
                     "config.vm.provision :shell, inline: <<-SHELL" + Environment.NewLine +
                     "sudo apt-get update" + Environment.NewLine +
-                    "sudo apt-get install docker-compose -y" + Environment.NewLine +
+                    "sudo apt-get install python-pip -y" + Environment.NewLine +
+                    "sudo pip install docker-compose" + Environment.NewLine +
                     "cd First/ && sudo docker-compose up -d" + Environment.NewLine +
                     "cd Second/ && sudo docker-compose up -d" + Environment.NewLine +
                     "SHELL" + Environment.NewLine +
