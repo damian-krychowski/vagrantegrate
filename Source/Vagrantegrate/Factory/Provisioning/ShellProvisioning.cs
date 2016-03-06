@@ -17,7 +17,7 @@ namespace Vagrantegrate.Factory.Provisioning
             _definitionAssumptions = definitionAssumptions;
         }
 
-        public IShellProvisioning WithShellExternalScript(string scriptFilePath)
+        public IShellProvisioning WithExternalScript(string scriptFilePath)
         {
             _definitionAssumptions.AssumeFileExists(scriptFilePath);
 
@@ -27,7 +27,7 @@ namespace Vagrantegrate.Factory.Provisioning
             return this;
         }
 
-        public IShellProvisioning WithShellInlineScript(string scriptBody)
+        public IShellProvisioning WithInlineScript(string scriptBody)
         {
             _vagrantFile.Provision.Shell.AddInlineScript(scriptBody);
             return this;

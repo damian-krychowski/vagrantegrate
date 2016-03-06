@@ -13,15 +13,16 @@ using Vagrantegrate.Tests.Infrastructure;
 
 namespace Vagrantegrate.Tests
 {
-    [Explicit]
-    [TestFixture]
+
+    [TestFixture, Ignore("Not ready yet")]
     internal class VagrantTests
     {
         private IVagrant _vagrant;
 
-        [OneTimeSetUp]
-        public void Prepare_vagrant_environment()
+        [Test, Explicit]
+        public void Can_create_vagrant_environment_with_fiware_orion()
         {
+            //Arrange
             _vagrant = IntegrationTestEnvironment.Prepare()
                 .WithEnvironmentFolder("C:/Vagrant/Orion")
                 .WithWily64()
@@ -30,7 +31,7 @@ namespace Vagrantegrate.Tests
                     .WithCpus(2)
                     .WithVmName("VagrantForOrion"))
                 .WithProvision(provision => provision
-                    .WithDockerComposeProvisioning(dockercompose => dockercompose                   
+                    .WithDockerComposeProvisioning(dockercompose => dockercompose
                         .WithDockerComposeFile(orion => orion
                             .From(@"C:/Vagrant/OrionDocker/docker-compose.yml")
                             .To("./Orion/docker-compose.yml")
@@ -41,11 +42,7 @@ namespace Vagrantegrate.Tests
 
             _vagrant.Destroy();
             _vagrant.Up();
-        }
 
-        [Test]
-        public void Can_create_vagrant_environment_witf_fiware_orion()
-        {
             //Act
             var result = HttpGetRequest("http://localhost:1026/version");
 
