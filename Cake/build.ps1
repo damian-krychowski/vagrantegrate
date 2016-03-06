@@ -29,7 +29,7 @@ http://cakebuild.net
 #>
 
 Param(
-    [string]$Script = "./build.cake",
+    [string]$Script = "./Cake/build.cake",
     [string]$Target = "Default",
     [string]$Configuration = "Release",
     [ValidateSet("Quiet", "Minimal", "Normal", "Verbose", "Diagnostic")]
