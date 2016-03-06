@@ -26,8 +26,7 @@ Task("Run-Unit-Tests")
     .Does(() =>
 {
     NUnit("../Source/Vagrantegrate.Tests/bin/Release/Vagrantegrate.Tests.dll", new NUnitSettings {
-        ToolPath = "../Source/packages/NUnit.ConsoleRunner.3.2.0/tools/nunit3-console.exe",
-        NoLogo = true
+        ToolPath = "../Source/packages/NUnit.ConsoleRunner.3.2.0/tools/nunit3-console.exe"
     });
 });
 
