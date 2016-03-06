@@ -3,7 +3,9 @@ Prepare environment for your integration tests with external components easily
 
 Vagrantegrate is a library allowing to prepare and start virtual machines hosted with Vagrant. It is advanced builder covering the most important Vagrantfile settings. The aim was to provide an easy way to reproduce an environment with code, so it can be started, used and cleaned up during tests session.
 
-Nuget: https://www.nuget.org/packages/vagrantegrate/1.0.0
+Nuget: https://www.nuget.org/packages/vagrantegrate
+
+Build: <image src="https://ci.appveyor.com/api/projects/status/a1gyrvbkbprd39qt/branch/master?svg=true">
 
 ## Environment example
 
